@@ -1,0 +1,7 @@
+﻿## Interface: 50400
+## Title: [|cffFFFFFF Truth |r]
+## Notes: UI Improvements
+## OptionalDeps: LibSharedMedia-3.0, Blizzard_DebugTools, Blizzard_PetJournal
+## SavedVariables: TruthDB
+
+inc.xml
