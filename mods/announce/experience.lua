@@ -1,6 +1,6 @@
 ﻿local AddOn, Addon = ...
 local A, C, T, L = unpack(select(2, ...))
-if (not C["Chat"]["Experience"]["Enable"]) then return end
+if (not C["Announce"]["Experience"]["Enable"]) then return end
 local print = function(...) Addon.print('experience', ...) end
 
 
@@ -39,7 +39,6 @@ end
 --]]
 
 local function OnEvent(self, event, arg1, arg2)							-- (self, event, msgtype, faction, reputation, ...)
-
 	if (event == "CHAT_MSG_COMBAT_XP_GAIN") then
 
 		local xp_gained = arg1:match("(%d+) experience")
@@ -47,6 +46,7 @@ local function OnEvent(self, event, arg1, arg2)							-- (self, event, msgtype, 
 
 		print(xp_gained .. " XP gained, " .. floor(xp_tolvl / xp_gained) .. " equal gains to next level")
 
+	end
 end
 
 local function OnLoad(self)
@@ -81,10 +81,10 @@ XP:SetScript("OnEvent", function(self, event, addon)
 		if (not TruthDB["Experience"]) then
 
 			TruthDB["Experience"] = {
-				["Enable"]				= true,
-				["Counter"] 				= 0,
-				["Timestamp"] 				= '',
-				["Announcements"]			= true,
+				["Enable"] = true,
+				["Counter"] = 0,
+				["Timestamp"] = '',
+				["Announcements"] = true,
 			}
 		end
 

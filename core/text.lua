@@ -1,6 +1,8 @@
 ﻿local AddOn, Addon = ...
 local A, C, T, L = unpack(select(2, ...))
 local print = function(...) Addon.print('text', ...) end
+if (not C["Addon"]["Text"]["Enable"]) then return end
+
 local P  = _G[AddOn]['pixel']['P']
 local px = _G[AddOn]['pixel']['px']
 
@@ -37,7 +39,8 @@ T.FormatTime_Tukui = function(s)
 	if     (s >= day)    	then return format('%dd', ceil(s / day))
 	elseif (s >= hour)   	then return format('%dh', ceil(s / hour))
 	elseif (s >= minute) 	then return format('%dm', ceil(s / minute))
-	elseif (s >= minute/12)	then return floor(s) end
+	elseif (s >= minute/12)	then return floor(s)
+	end
 
 	return format('%.1f', s)
 end

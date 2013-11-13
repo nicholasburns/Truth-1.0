@@ -13,7 +13,7 @@ local format = string.format
 --==============================================--
 --	Constants
 --==============================================--
-local FORMATSTRING = C["Chat"]["Channels"]["Format"]
+local FORMATSTRING = C["Chat"]["Channels"]["FormatString"]
 -- local FORMATSTRING = "%s "						-- '01.18 G Hey Guys'
 
 local L_BN_IN 			= format(FORMATSTRING, "B")

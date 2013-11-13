@@ -11,8 +11,8 @@ local math, ceil, floor, max, min = math, math.ceil, math.floor, math.max, math.
 local string, find, format = string, string.find, string.format
 local table, tinsert = table, table.insert
 
-local Kill = T.Kill
-local Strip = T.Strip
+-- local Kill = T.Kill
+-- local Strip = T.Strip
 
 
 --==============================================--
@@ -27,6 +27,12 @@ local eR, eG, eB, eA = unpack(Addon.default.border.color)
 --================================================================================================--
 --							Pixel API
 --================================================================================================--
+local px = A["px"]
+
+local scale = function(x)
+	return px * floor(x / px + 0.5)
+end
+
 local Scale = scale
 
 local Size = function(f, w, h)
@@ -77,6 +83,33 @@ local SetOutside = function(o, anchor, x, y)
 
 	o:SetPoint('TOPLEFT', anchor, -x, y)
 	o:SetPoint('BOTTOMRIGHT', anchor, x, -y)
+end
+
+local Kill = function(obj)
+	if (not obj) then return end
+
+	if (obj.UnregisterAllEvents) then
+		obj:UnregisterAllEvents()
+		obj:SetParent(A["HiddenFrame"])
+	else
+		obj.Show = function() return end
+	end
+
+	obj:Hide()
+end
+
+local Strip = function(obj, kill)
+	for i = 1, obj:GetNumRegions() do
+		local region = select(i, obj:GetRegions())
+
+		if (region:GetObjectType() == 'Texture') then
+			if (kill) then
+				region:Kill()
+			else
+				region:SetTexture(nil)
+			end
+		end
+	end
 end
 
 --================================================================================================--
@@ -622,6 +655,7 @@ T.SkinScrollBar 					= SkinScrollBar
 T.SkinSlideBar 					= SkinSlideBar
 T.SkinTab 						= SkinTab
 --]]
+
 --================================================================================================--
 
 --							 Injection
@@ -631,34 +665,38 @@ local function addapi(O)
 	local mt = getmetatable(O).__index
 
 	-- Utils
-	if (not O.Kill) then 			mt.Kill 				= Kill end
-	if (not O.Strip) then 			mt.Strip 				= Strip end
+	if (not O.Kill) then mt.Kill = Kill end
+	if (not O.Strip) then mt.Strip = Strip end
 
 	-- Pixel API
-	if (not O.Scale) then 			mt.Scale 				= Scale end
-	if (not O.Size) then 			mt.Size 				= Size end
-	if (not O.Width) then 			mt.Width 				= Width end
-	if (not O.Height) then 			mt.Height 			= Height end
-	if (not O.Point) then 			mt.Point 				= Point end
-	if (not O.SetInside) then 		mt.SetInside 			= SetInside end
-	if (not O.SetOutside) then 		mt.SetOutside 			= SetOutside end
+	if (not O.scale) then mt.scale = scale end
+	if (not O.Scale) then mt.Scale = Scale end
+	if (not O.Size) then mt.Size = Size end
+	if (not O.Width) then mt.Width = Width end
+	if (not O.Height) then mt.Height = Height end
+	if (not O.Point) then mt.Point = Point end
+	if (not O.SetInside) then  mt.SetInside = SetInside end
+	if (not O.SetOutside) then  mt.SetOutside = SetOutside end
 
 	-- Frame API
-	if (not O.Colorize) then 		mt.Colorize 			= Colorize end
-	if (not O.Overlay) then 			mt.Overlay 			= Overlay end
-	if (not O.Border) then 			mt.Border 			= Border end
-	if (not O.Template) then 		mt.Template 			= Template end
-	if (not O.Backdrop) then			mt.Backdrop 			= Backdrop end
-	if (not O.Shadow) then 			mt.Shadow 			= Shadow end
+	if (not O.Colorize) then mt.Colorize = Colorize end
+	if (not O.Overlay) then mt.Overlay = Overlay end
+	if (not O.Border) then mt.Border = Border end
+	if (not O.Template) then mt.Template = Template end
+	if (not O.Backdrop) then mt.Backdrop = Backdrop end
+	if (not O.Shadow) then mt.Shadow = Shadow end
 
-	if (not O.NewBackdrop) then		mt.NewBackdrop 		= NewBackdrop end
-	if (not O.OldBackdrop) then		mt.OldBackdrop 		= OldBackdrop end
-	if (not O.AltBackdrop) then		mt.AltBackdrop 		= AltBackdrop end
-	if (not O.FixBackdrop) then		mt.FixBackdrop 		= FixBackdrop end
+	if (not O.NewBackdrop) then mt.NewBackdrop = NewBackdrop end
+	if (not O.OldBackdrop) then mt.OldBackdrop = OldBackdrop end
+	if (not O.AltBackdrop) then mt.AltBackdrop = AltBackdrop end
+	if (not O.FixBackdrop) then mt.FixBackdrop = FixBackdrop end
+
+	-- Object API
+	-- if (not O.Button) then mt.Button = Button end
 
 	-- Accessory Functions
-	if (not O.StyleButton) then 		mt.StyleButton 		= StyleButton end
-	if (not O.FontString) then 		mt.FontString			= FontString end
+	if (not O.StyleButton) then mt.StyleButton = StyleButton end
+	if (not O.FontString) then mt.FontString = FontString end
 
 	-- Skin API
 	-- if (not O.SkinButton) then 		mt.SkinButton 			= SkinButton end

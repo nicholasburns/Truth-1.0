@@ -1,7 +1,7 @@
 local AddOn, Addon = ...
 local A, C, T, L = unpack(select(2, ...))
 if (not C["Quest"]["Enable"]) then return end
-
+local print = function(...) Addon.print('quest', ...) end
 
 local match, sub, gsub = string.match, string.sub, string.gsub
 local insert, wipe = table.insert, table.wipe
@@ -214,7 +214,7 @@ local function questlevel()
 	local scrollOffset 		= HybridScrollFrame_GetOffset(QuestLogScrollFrame)
 
 	for i = 1, (#buttons) do
-		local qIndex = + scrollOffset
+		local qIndex = i + scrollOffset
 		local qLogTitle = buttons[i]
 
 		if (qIndex <= numEntries) then

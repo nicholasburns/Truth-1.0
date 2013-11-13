@@ -1,13 +1,12 @@
 local AddOn, Addon = ...
 local A, C, T, L = unpack(select(2, ...))
-if (not C["Chat"]["Bubbles"]["Enable"]) then return end
-local print = function(...) Addon.print('bubbles', ...) end
+if (not C["Chat"]["Bubble"]["Enable"]) then return end
+local print = function(...) Addon.print('bubble', ...) end
 
-
-
-local pairs, select 				= pairs, select
-local WorldFrame					= WorldFrame
-local GetCVarBool 					= GetCVarBool
+local tinsert = table.insert
+local next, pairs, select, unpack = next, pairs, select, unpack
+local WorldFrame = WorldFrame
+local GetCVarBool = GetCVarBool
 
 
 
@@ -39,7 +38,7 @@ local skinBubbles
 skinBubbles = function(frame, ...)
 	if (not frame.isTransparentBubble and isBubble(frame)) then
 
-		for i = 1, frame:GetNumRegions() do
+		for i = 1, (frame:GetNumRegions()) do
 			local region = select(i, frame:GetRegions())
 
 			if (region:GetObjectType() == 'Texture') then
@@ -104,6 +103,7 @@ f:SetScript('OnUpdate', function(self, elapsed)
 		self:Hide()
 		skinBubbles(WorldFrame:GetChildren())
 	end
+
 end)
 
 

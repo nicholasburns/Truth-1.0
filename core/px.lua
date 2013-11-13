@@ -19,13 +19,15 @@ local floor, min, max = math.floor, math.min, math.max
 --==============================================--
 local uiscale = min(2, max(0.64, 768 / match(GetCVar('gxResolution'), '%d+x(%d+)')))
 local px = 768 / strmatch(GetCVar('gxResolution'), '%d+x(%d+)') / uiscale
-
+_G[AddOn]["px"] = px
 
 local scale = function(x)
 	return px * floor(x / px + 0.5)
 end
+_G[AddOn]["scale"] = scale
 
-local adjusted_uiscale
+
+local adjusted_uiscale = 0.64
 if (uiscale < 0.64) then						-- number cleanup
 	adjusted_uiscale = uiscale
 end
@@ -84,7 +86,7 @@ module.P = P
 module.px = px
 module.Scale = scale
 
-module.uiscale = adjusted_uiscale
+-- module.uiscale = adjusted_uiscale
 
 --[[ Moved Section -> core\api.lua
 

@@ -2,8 +2,9 @@
 -- AsphyxiaUI\Elements\DataTexts\Elements\Time.lua
 local AddOn, Addon = ...
 local A, C, T, L = unpack(select(2, ...))
-if (not C["Time"]["Enable"]) then return end
+if (not C["Addon"]["Time"]["Enable"]) then return end
 local print = function(...) Addon.print('time', ...) end
+
 local format, tonumber = string.format, tonumber
 local GetGameTime, date = GetGameTime, date
 
@@ -24,7 +25,7 @@ local AMPM = {
 }
 
 -- Configuration
-local UseLocalTime = C["Time"]["UseLocal"]
+local UseLocalTime = C["Addon"]["Time"]["UseLocal"]
 
 --[[ Date Table
 

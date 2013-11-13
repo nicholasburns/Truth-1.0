@@ -128,7 +128,7 @@ local function SetupChatWindows()
 		end
 
 		-- Font
-		FCF_SetChatWindowFontSize(nil, f, C["Chat"]["Font"][1])
+		FCF_SetChatWindowFontSize(nil, f, C["Chat"]["Font"][2])
 		f:SetFont(unpack(C["Chat"]["Font"]))											-- f:SetFont(C["Chat"]["Font"][1], C["Chat"]["Font"][2], C["Chat"]["Font"][3])
 		f:SetShadowOffset(C["Chat"]["Font"][4] or 0, -C["Chat"]["Font"][4] or 0)
 	end
@@ -157,6 +157,8 @@ local function ChatStyle(chatframe)
 		insets = {left = K, right = K, top = K, bottom = K}})
 	f:SetBackdropColor(unpack(Addon.default.backdrop.color))
 
+	local X = P[1]
+
 	local border = CreateFrame('Frame', '$parentBorder', f)
 	border:SetPoint('TOPLEFT', X, -X)
 	border:SetPoint('BOTTOMRIGHT', -X, X)
@@ -184,12 +186,12 @@ local function ChatStyle(chatframe)
 		end)
 	end
 
-	Kill(ChatFrameMenuButton)
-  -- Kill(_G[name .. 'ButtonFrame'])
-	Kill(_G[name .. 'ButtonFrameUpButton'])
-	Kill(_G[name .. 'ButtonFrameDownButton'])
-  -- Kill(_G[name .. 'ButtonFrameBottomButton'])
-	Kill(_G[name .. 'ButtonFrameMinimizeButton'])
+	ChatFrameMenuButton:Kill()
+  -- _G[name .. 'ButtonFrame']:Kill()
+	_G[name .. 'ButtonFrameUpButton']:Kill()
+	_G[name .. 'ButtonFrameDownButton']:Kill()
+  -- _G[name .. 'ButtonFrameBottomButton']:Kill()
+	_G[name .. 'ButtonFrameMinimizeButton']:Kill()
 
 	f.styled = true
 end

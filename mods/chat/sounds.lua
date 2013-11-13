@@ -4,7 +4,7 @@ if (not C["Chat"]["Sounds"]["Enable"]) then return end
 local print = function(...) Addon.print('sounds', ...) end
 
 local PlaySoundFile = PlaySoundFile
-local UnitName = UnitName
+
 
 
 -- Constant
@@ -57,6 +57,7 @@ s:SetScript('OnEvent', function(self, event, ...)
 
 		PlaySoundFile(sound, 'Master')								-- print('<sounds> PlaySoundFile: ' .. sound)
 	end
+
 end)
 
 for event, sound in pairs(EventSounds) do

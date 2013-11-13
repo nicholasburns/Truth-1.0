@@ -262,19 +262,6 @@ T.GetAnnounceChannel = function(warning)
 end
 
 --==============================================--
---	Constructors
---==============================================--
-T.Button = function(text, parent)
-  -- Button Factory
-
-	local buttonName = '$parent' .. text .. 'Button'
-	local button = CreateFrame('Button', buttonName, parent, 'UIPanelButtonTemplate')			-- local button = CreateFrame('Button', '$parent' .. text .. 'Button', parent, 'UIPanelButtonTemplate')
-	button:SetText(text)
-
-	return button
-end
-
---==============================================--
 --	Frame
 --==============================================--
 T.MakeMovable = function(f, strata)
@@ -306,7 +293,7 @@ T.Kill = function(obj)
 		obj:UnregisterAllEvents()
 		obj:SetParent(A["HiddenFrame"])
 	else
-		obj.Show = function() return end
+		obj.Show = A["Dummy"]
 	end
 
 	obj:Hide()
@@ -326,7 +313,18 @@ T.Strip = function(obj, kill)
 	end
 end
 
+--==============================================--
+--	Object
+--==============================================--
+T.Button = function(parent, text)
+  -- Button Factory
 
+	local buttonName = '$parent' .. text .. 'Button'
+	local button = CreateFrame('Button', buttonName, parent, 'UIPanelButtonTemplate')			-- local button = CreateFrame('Button', '$parent' .. text .. 'Button', parent, 'UIPanelButtonTemplate')
+	button:SetText(text)
+
+	return button
+end
 
 --==============================================--
 --	Math

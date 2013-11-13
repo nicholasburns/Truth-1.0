@@ -1,33 +1,8 @@
 -- Add item icons to tooltips (credit: Tipachu by Tuller)
+local AddOn, Addon = ...
 local A, C, T, L = unpack(select(2, ...))
-if (not C["Tooltip"]["Icon"]) then return end
+if (not C["Chat"]["Icon"]["Enable"]) then return end
 local print = function(...) Addon.print('icon', ...) end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

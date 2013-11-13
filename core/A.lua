@@ -2,8 +2,43 @@
 local AddOn, Addon = ...
 local A, C, T, L = unpack(select(2, ...))
 local print = function(...) Addon.print('A', ...) end
-local min, max, tonumber, match  = math.min, math.max, tonumber, string.match
 
+local min, max, tonumber, match = math.min, math.max, tonumber, string.match
+local floor, min, max, tonumber = math.floor, math.min, math.max, tonumber
+
+
+--[[
+
+A = {
+	Name = "Truth"
+--	Version does not exist = not in my TOC
+	Title = "[|cffFFFFFF Truth |r]"
+	ClientLocale = "enUS"
+	Print = <function>
+
+	MyName = "Truthmachine"
+	MyLevel = 90
+	MyClass = "ROGUE"
+	MyRace = "Orc"
+	MyFaction = "Horde"
+	MyRealm = "Mal'Ganis"
+	MyColor = <table>
+
+	ScreenResolution = "2560x1440"
+	ScreenWidth = 2560
+	ScreenHeight = 1440
+	UIScale = 0.64
+	px = 0.83333333333333
+
+
+	Dummy = <function>
+	TexCoords = {}
+	Colors = {}
+	HiddenFrame = {}
+	PetBattleHider = {}
+}
+
+--]]
 
 --==============================================--
 --	Addon
@@ -19,10 +54,10 @@ A["Print"] 			= function(...) print("|cffFF6347" .. A["Name"] .. "|r:", ...) end
 --	Graphic
 --==============================================--
 A["ScreenResolution"]	= GetCVar("gxResolution")
-A["ScreenHeight"] 		= tonumber(match(A["ScreenResolution"], "%d+x(%d+)"))
 A["ScreenWidth"] 		= tonumber(match(A["ScreenResolution"], "(%d+)x+%d"))
+A["ScreenHeight"] 		= tonumber(match(A["ScreenResolution"], "%d+x(%d+)"))
 A["UIScale"] 			= min(2, max(0.64, 768 / match(A["ScreenResolution"], "%d+x(%d+)")))						-- T.uiscale = math.min(2, math.max(.64, 768 / match(GetCVar('gxResolution'), '%d+x(%d+)')))
-A["px"]				= 768 / strmatch(GetCVar('gxResolution'), '%d+x(%d+)') / A["UIScale"]
+A["px"]				= 768 / match(GetCVar('gxResolution'), '%d+x(%d+)') / A["UIScale"]
 
 
 --==============================================--
@@ -41,10 +76,9 @@ A["MyColor"]			= (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[ A["MyClass"] ]
 --	Functions
 --==============================================--
 A["Dummy"] = function() return end
+A["TexCoords"] = {0.08, 0.92, 0.08, 0.92}
 
 A["Colors"] = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[ A["MyClass"] ]
-
-A["TexCoords"] = {0.08, 0.92, 0.08, 0.92}
 
 A["HiddenFrame"] = CreateFrame("Frame", nil, UIParent)
 A["HiddenFrame"]:Hide()
@@ -54,83 +88,82 @@ A["PetBattleHider"]:SetAllPoints()
 RegisterStateDriver(A["PetBattleHider"], "visibility", "[petbattle] hide; show")
 
 
-local match, tonumber = string.match, tonumber
-local floor, min, max = math.floor, math.min, math.max
-
-
 --==============================================--
---	Pixelsize
+--	Pixel Module
 --==============================================--
-local uiscale = min(2, max(0.64, 768 / match(GetCVar('gxResolution'), '%d+x(%d+)')))
-local px = 768 / strmatch(GetCVar('gxResolution'), '%d+x(%d+)') / uiscale
-
+local px = A["px"]
 
 local scale = function(x)
 	return px * floor(x / px + 0.5)
 end
 
-local adjusted_uiscale
-if (uiscale < 0.64) then						-- number cleanup
-	adjusted_uiscale = uiscale
-end
-
-
---==============================================--
---	Pixelsizes
---==============================================--
 local P = {
-	[1]  =  1 * px,
-	[2]  =  2 * px,
-	[3]  =  3 * px,
-	[4]  =  4 * px,
-	[5]  =  5 * px,
-	[6]  =  6 * px,
-	[7]  =  7 * px,
-	[8]  =  8 * px,				-- tiny
-	[9]  =  9 * px,
+	[1]  =  1 * px, -->0.83333333333333
+	[2]  =  2 * px, -->1.6666666666667
+	[3]  =  3 * px, -->2.5
+	[4]  =  4 * px, -->3.3333333333333
+	[5]  =  5 * px, -->4.1666666666667
+	[6]  =  6 * px, -->5
+	[7]  =  7 * px, -->5.8333333333333
+	[8]  =  8 * px, -->6.6666666666667           -- tiny
+	[9]  =  9 * px, -->7.5
 
-	[10] = 10 * px,				-- small
-	[11] = 11 * px,
+	[10] = 10 * px, -->8.3333333333333           -- small
+	[11] = 11 * px, -->9.1666666666667
 
-	[12] = 12 * px,				-- medium (normal)
-	[13] = 13 * px,
-	[14] = 14 * px,				--[[ header ]]
-	[15] = 15 * px,
-	[16] = 16 * px,				-- large
-	[17] = 17 * px,
-	[18] = 18 * px,
-	[19] = 19 * px,
-	[20] = 20 * px,				-- huge / huge1
+	[12] = 12 * px, -->10                        -- medium (normal)
+	[13] = 13 * px, -->10.833333333333
+	[14] = 14 * px, -->11.666666666667           --[[ header ]]
+	[15] = 15 * px, -->
+	[16] = 16 * px, -->13.333333333333           -- large
+	[17] = 17 * px, -->14.166666666667
+	[18] = 18 * px, -->15
+	[19] = 19 * px, -->15.833333333333
+	[20] = 20 * px, -->16.666666666667           -- huge / huge1
 
-	[22] = 22 * px,
-	[24] = 24 * px,				-- superhuge
-	[26] = 26 * px,
-	[28] = 28 * px,
-	[30] = 30 * px,
+	[22] = 22 * px, -->18.333333333333
+	[24] = 24 * px, -->20                        -- superhuge
+	[26] = 26 * px, -->21.666666666667
+	[28] = 28 * px, -->23.333333333333
+	[30] = 30 * px, -->25
 
-	[32] = 32 * px,				-- gigantic
-  -- [34] = 34 * px,
-  -- [36] = 36 * px,
-  -- [38] = 38 * px,
-  -- [40] = 40 * px,
-
-  -- [42] = 42 * px,
-  -- [44] = 44 * px,
-  -- [46] = 46 * px,
-  -- [48] = 48 * px,
-  -- [50] = 50 * px,
+	[32] = 32 * px, -->26.666666666667           -- gigantic
+	[48] = 48 * px, -->40
 }
 
+A["P"] = P
+A["Scale"] = scale
 
---==============================================--
---	Unused
---==============================================--
---[[	if(A["MyName"] == "Truthmachine" or A["MyName"] == "Truthwynn") then A["IsAuthor"] = true end
+--[[  local Ps = {
+	[1]  = scale(1),  -->0.83333333333333
+	[2]  = scale(2),  -->1.6666666666667
+	[4]  = scale(4),  -->3.3333333333333
+	[5]  = scale(5),  -->4.1666666666667
+	[8]  = scale(8),  -->6.6666666666667           -- tiny
+	[10] = scale(10), -->8.3333333333333           -- small
+	[11] = scale(11), -->9.1666666666667
+	[16] = scale(16), -->13.333333333333           -- large
+	[17] = scale(17), -->14.166666666667
+	[20] = scale(20), -->16.666666666667           -- huge / huge1
+	[22] = scale(22), -->18.333333333333
+}
 
-	local Layouts = {}
-	A["Layouts"] = Layouts
---]]
+_G.X = Ps
 
+_G.X {
+    [1] = 0.83333333333333;
+    [2] = 1.6666666666667;
+    [4] = 4.1666666666667;
+    [8] = 8.3333333333333;
+    [16] = 15.833333333333;
+    [17] = 16.666666666667;
+    [5] = 5;
+    [10] = 10;
+    [20] = 20;
+    [11] = 10.833333333333;
+    [22] = 21.666666666667;
+};
+--]]
 --==============================================--
 --	Previous Version
 --==============================================--

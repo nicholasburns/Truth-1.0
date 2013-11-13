@@ -1,6 +1,6 @@
 local AddOn, Addon = ...
 local A, C, T, L = unpack(select(2, ...))
-if (not C["Numbers"]["Enable"]) then return end
+if (not C["Addon"]["Numbers"]["Enable"]) then return end
 local print = function(...) Addon.print('numbers', ...) end
 
 local assert = assert

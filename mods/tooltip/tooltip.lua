@@ -42,13 +42,13 @@ local Tooltips = {
 	ItemRefShoppingTooltip3,
 }
 for _, Tooltip in pairs(Tooltips) do
-  -- T.SkinTooltip(Tooltip)										-- Tooltips:SetTemplate("Transparent")
+--~  print('Tooltip: ', Tooltip:GetName())
 
-	Tooltip:SkinTooltip()
+	T.SkinTooltip(Tooltip)
 
 	Tooltip:HookScript("OnShow", function(self)
-		self:SetBackdropColor(unpack(Addon.default.overlay.color))		-- (C.media.overlay_color))
-		self:SetBackdropBorderColor(unpack(Addon.default.border.color))	-- (C.media.border_color))
+		self:SetBackdropColor(unpack(Addon.default.overlay.color))
+		self:SetBackdropBorderColor(unpack(Addon.default.border.color))
 	end)
 end
 

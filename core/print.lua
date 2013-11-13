@@ -81,6 +81,10 @@ local function Split(str)
 	end
 end
 
+
+--==============================================--
+--	Slash Handler
+--==============================================--
 A.SlashHandler = function(cmd)
 	local arg1, arg2 = strlower(Split(cmd))
 

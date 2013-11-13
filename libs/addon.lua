@@ -1,9 +1,8 @@
 ﻿local AddOn, Addon = ...
 local A, C, T, L = unpack(select(2, ...))
-if (not C["Tooltip"]["Text"]) then return end
-local print = function(...) Addon.print('text', ...) end
-local P  = _G[AddOn]['pixel']['P']
-local px = _G[AddOn]['pixel']['px']
+if (not C["Addon"]["Enable"]) then return end
+local print = function(...) Addon.print('addon', ...) end
+
 
 
 

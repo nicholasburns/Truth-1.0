@@ -49,7 +49,12 @@ resize:SetScript('OnMouseDown', function(self) aom:StartSizing() end)
 resize:SetScript('OnMouseUp',   function(self) aom:StopMovingOrSizing() end)
 
 -- Reload Button
-local reload = Button('Reload', aom)
+-- local reload = Button('AOM', 'Reload')
+-- local reload = Button(aom, 'Reload')
+-- local buttonName = '$parent' .. text .. 'Button'
+-- local button = CreateFrame('Button', buttonName, parent, 'UIPanelButtonTemplate')
+local reload = CreateFrame('Button', '$parentReloadButton', aom, 'UIPanelButtonTemplate')
+reload:SetText('Reload')
 reload:Size(150, 22)
 reload:SetPoint('BOTTOM', 0, 10)
 reload:SetScript('OnClick', function() ReloadUI() end)
@@ -78,7 +83,7 @@ aom:SetMinResize(200, 400)
 aom:SetMaxResize(A["ScreenWidth"], A["ScreenHeight"]) 										-- (A["ScreenWidth"] * 0.8, A["ScreenHeight"] * 0.8)
 
 -- Skin
-aom:Skin()																		-- Skin(aom)
+aom:Template()																		-- Skin(aom)
 
 
 --==============================================--
@@ -86,7 +91,7 @@ aom:Skin()																		-- Skin(aom)
 --==============================================--
 do
 	-- ScrollFrame
-	scroll:Skin()																	-- Skin(scroll)
+	scroll:Template()																	-- Skin(scroll)
 	scroll:SetBackdropColor(unpack(Addon.default.backdrop.colorAlt))
 
 	-- ScrollChild

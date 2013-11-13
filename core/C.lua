@@ -9,18 +9,24 @@ local px = _G[AddOn]['pixel']['px']
 --==============================================--
 --	C
 --==============================================--
+C["Addon"] = {
+	["Enable"] = true,
+	["Numbers"] = {
+		["Enable"] = true,
+	},
+	["Text"] = {
+		["Enable"] = true,
+	},
+	["Time"] = {
+		["Enable"] = true,
+		["UseLocal"] = true,
+	},
+}
+
 C["AOM"] = {
 	["Enable"] = true,
 }
 
-C["Numbers"] = {
-	["Enable"] = true,
-}
-
-C["Time"] = {
-	["Enable"] = true,
-	["UseLocal"] = true,
-}
 
 C["Announce"] = {
 	["Enable"] = true,
@@ -99,9 +105,12 @@ C["Character"] = {
 
 C["Chat"] = {
 	["Enable"] = true,
-	["Sounds"] = true,
-	["Bags"]	= true,
-	["Bubbles"] = true,
+	["Armory"] = {
+		["Enable"] = true,
+	},
+	["Bubble"] = {
+		["Enable"] = true,
+	},
 	["Channels"] = {
 		["Enable"] = true,
 		["Default"] = "%s|| ",
@@ -112,6 +121,12 @@ C["Chat"] = {
 		["Enable"] = true,
 		["ButtonNormal"] = [=[Interface\BUTTONS\UI-GuildButton-PublicNote-Disabled]=],
 		["ButtonHighlight"] = [=[Interface\BUTTONS\UI-GuildButton-PublicNote-Up]=],
+	},
+	["Icon"] = {
+		["Enable"] = true,
+	},
+	["Sounds"] = {
+		["Enable"] = true,
 	},
 	["Tab"] = {
 		["Enable"] = true,
