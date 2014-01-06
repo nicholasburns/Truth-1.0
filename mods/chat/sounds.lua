@@ -1,7 +1,7 @@
 ﻿local AddOn, Addon = ...
 local A, C, T, L = unpack(select(2, ...))
 if (not C["Chat"]["Sounds"]["Enable"]) then return end
-local print = function(...) Addon.print('sounds', ...) end
+local print = function(...) Addon.print('chat.sounds', ...) end
 
 local PlaySoundFile = PlaySoundFile
 

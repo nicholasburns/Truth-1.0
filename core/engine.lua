@@ -200,7 +200,7 @@ _G[AddOn] = Engine
 		obj:SetPoint('BOTTOMRIGHT', anchor, -x,  y)
 	end
 
-	T.mult = px
+	T.mult = X
 --]]
 
 --[[ Slash Reload

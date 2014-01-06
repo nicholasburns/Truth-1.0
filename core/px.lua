@@ -1,4 +1,7 @@
-﻿local AddOn, Addon = ...
+﻿if (not false) then return end
+
+
+local AddOn, Addon = ...
 local module = {}
 local moduleName = "pixel"
 _G[AddOn][moduleName] = module				--[[ _G.Truth.pixel = {} ]]
@@ -18,11 +21,11 @@ local floor, min, max = math.floor, math.min, math.max
 --	Constants
 --==============================================--
 local uiscale = min(2, max(0.64, 768 / match(GetCVar('gxResolution'), '%d+x(%d+)')))
-local px = 768 / strmatch(GetCVar('gxResolution'), '%d+x(%d+)') / uiscale
-_G[AddOn]["px"] = px
+local X = 768 / strmatch(GetCVar('gxResolution'), '%d+x(%d+)') / uiscale
+_G[AddOn]["X"] = X
 
 local scale = function(x)
-	return px * floor(x / px + 0.5)
+	return X * floor(x / X + 0.5)
 end
 _G[AddOn]["scale"] = scale
 
@@ -37,53 +40,53 @@ end
 --	Pixelsizes
 --==============================================--
 local P = {
-	[1]  =  1 * px,
-	[2]  =  2 * px,
-	[3]  =  3 * px,
-	[4]  =  4 * px,
-	[5]  =  5 * px,
-	[6]  =  6 * px,
-	[7]  =  7 * px,
-	[8]  =  8 * px,				-- tiny
-	[9]  =  9 * px,
+	[1]  =  1 * X,
+	[2]  =  2 * X,
+	[3]  =  3 * X,
+	[4]  =  4 * X,
+	[5]  =  5 * X,
+	[6]  =  6 * X,
+	[7]  =  7 * X,
+	[8]  =  8 * X,				-- tiny
+	[9]  =  9 * X,
 
-	[10] = 10 * px,				-- small
-	[11] = 11 * px,
+	[10] = 10 * X,				-- small
+	[11] = 11 * X,
 
-	[12] = 12 * px,				-- medium (normal)
-	[13] = 13 * px,
-	[14] = 14 * px,				--[[ header ]]
-	[15] = 15 * px,
-	[16] = 16 * px,				-- large
-	[17] = 17 * px,
-	[18] = 18 * px,
-	[19] = 19 * px,
-	[20] = 20 * px,				-- huge / huge1
+	[12] = 12 * X,				-- medium (normal)
+	[13] = 13 * X,
+	[14] = 14 * X,				--[[ header ]]
+	[15] = 15 * X,
+	[16] = 16 * X,				-- large
+	[17] = 17 * X,
+	[18] = 18 * X,
+	[19] = 19 * X,
+	[20] = 20 * X,				-- huge / huge1
 
-	[22] = 22 * px,
-	[24] = 24 * px,				-- superhuge
-	[26] = 26 * px,
-	[28] = 28 * px,
-	[30] = 30 * px,
+	[22] = 22 * X,
+	[24] = 24 * X,				-- superhuge
+	[26] = 26 * X,
+	[28] = 28 * X,
+	[30] = 30 * X,
 
-	[32] = 32 * px,				-- gigantic
-  -- [34] = 34 * px,
-  -- [36] = 36 * px,
-  -- [38] = 38 * px,
-  -- [40] = 40 * px,
+	[32] = 32 * X,				-- gigantic
+  -- [34] = 34 * X,
+  -- [36] = 36 * X,
+  -- [38] = 38 * X,
+  -- [40] = 40 * X,
 
-  -- [42] = 42 * px,
-  -- [44] = 44 * px,
-  -- [46] = 46 * px,
-  -- [48] = 48 * px,
-  -- [50] = 50 * px,
+  -- [42] = 42 * X,
+  -- [44] = 44 * X,
+  -- [46] = 46 * X,
+  -- [48] = 48 * X,
+  -- [50] = 50 * X,
 }
 
 --==============================================--
 --	Interface
 --==============================================--
 module.P = P
-module.px = px
+module.X = X
 module.Scale = scale
 
 -- module.uiscale = adjusted_uiscale

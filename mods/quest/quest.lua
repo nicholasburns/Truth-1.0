@@ -53,6 +53,7 @@ end
 function QM:QUEST_LOG_UPDATE()
 	if (not self:canAutomate()) then return end
 
+	local _								--~  Rampant taints occur if this is removed
 	local title
 	local is_complete
 	local no_objectives
@@ -66,7 +67,7 @@ function QM:QUEST_LOG_UPDATE()
 		for i = 1, num_entries do
 			SelectQuestLogEntry(i)
 
-			title,_,_,_,_,_,is_complete = GetQuestLogTitle(i)
+			title, _, _, _, _, _, is_complete = GetQuestLogTitle(i)
 
 			no_objectives = GetNumQuestLeaderBoards(i) == 0
 

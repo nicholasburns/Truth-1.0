@@ -1,7 +1,7 @@
 local AddOn, Addon = ...
 local A, C, T, L = unpack(select(2, ...))
 if (not C["Chat"]["Bubble"]["Enable"]) then return end
-local print = function(...) Addon.print('bubble', ...) end
+local print = function(...) Addon.print('chat.bubble', ...) end
 
 local tinsert = table.insert
 local next, pairs, select, unpack = next, pairs, select, unpack

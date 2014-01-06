@@ -1,9 +1,12 @@
 ﻿-- credit: MSBT by Mikord
 local AddOn, Addon = ...
-local module = {}
-local moduleName = "media"
-_G[AddOn][moduleName] = module
+-- local module = {}
+-- local moduleName = "media"
+-- _G[AddOn][moduleName] = module
 --[[ _G.Truth.media = {} ]]
+
+
+_G[AddOn]["media"] = {}
 
 
 
@@ -19,7 +22,7 @@ local STATUSBAR_PATH	= 'Interface\\AddOns\\' .. AddOn .. '\\media\\statusbar\\'
 local SOUND_PATH		= 'Interface\\AddOns\\' .. AddOn .. '\\media\\sound\\'
 
 -- LibSharedMedia
-local LSM = LibStub('LibSharedMedia-3.0')
+local LSM = LibStub and LibStub('LibSharedMedia-3.0')
 local LSM_LANG_MASK_ALL = 255
 
 
@@ -27,24 +30,28 @@ local LSM_LANG_MASK_ALL = 255
 --	Private Variables
 --==============================================--
 local media = {
+
 	background = {
 		['solid']		= BACKGROUND_PATH .. 'solid.tga',
 		['tooltip']	= [=[Interface\Tooltips\UI-Tooltip-Background]=],
 		['white8X8']	= [=[Interface\BUTTONS\WHITE8X8]=],
 	},
+
 	border = {
 		['glow']		= BORDER_PATH .. 'glow.tga',
 		['solid']		= BORDER_PATH .. 'solid.tga',
 		['white']		= BORDER_PATH .. 'white.tga',
 	},
+
 	font = {
-	  -- 'Interface\\AddOns\\Truth\\media\\font\\continuum.ttf'
 		['continuum']	= FONT_PATH .. 'continuum.ttf',	-- NORMAL | Monospace
 		['grunge']	= FONT_PATH .. 'grunge.ttf',		--		  Alerts
 		['myriad']	= FONT_PATH .. 'myriad.ttf',		-- NUMBER | Condensed
 		['visitor']	= FONT_PATH .. 'visitor.ttf',		-- COMBAT | Pixel
 		['zekton']	= FONT_PATH .. 'zekton.ttf',		-- HEADER | Modern
+	  -- 'Interface\\AddOns\\Truth\\media\\font\\continuum.ttf'
 	},
+
 	statusbar = {
 		['flat'] 		= STATUSBAR_PATH .. 'flat.tga',
 		['glow'] 		= STATUSBAR_PATH .. 'glow.tga',
@@ -52,16 +59,22 @@ local media = {
 		['rich']		= STATUSBAR_PATH .. 'rich.tga',
 		['smooth']	= STATUSBAR_PATH .. 'smooth.tga',
 	},
+
 	sound = {
-		['acquire']	= SOUND_PATH .. 'acquire.mp3',
-		['electronic']	= SOUND_PATH .. 'estring.mp3',
-		['error']		= SOUND_PATH .. 'error.mp3',
+		['acquire']	= SOUND_PATH .. 'acquire.mp3',	-- Addon.media.sound.acquire
+		['electronic']	= SOUND_PATH .. 'estring.mp3',	-- Addon.media.sound.estring
+		['error']		= SOUND_PATH .. 'error.mp3',		-- Addon.media.sound.error
 		['msn']		= SOUND_PATH .. 'msn.mp3',
-		['warn']		= SOUND_PATH .. 'warn.ogg',
-		['femalewarn']	= SOUND_PATH .. 'femalewarn.mp3',
+		['warn']		= SOUND_PATH .. 'warn.ogg',		-- Addon.media.sound.warn
+		['femalewarn']	= SOUND_PATH .. 'femalewarn.mp3',	-- Addon.media.sound.femalewarn
 		['whisper']	= SOUND_PATH .. 'whisper.mp3',	-- Addon.media.sound.whisper
 		['yoshi']		= SOUND_PATH .. 'yoshi.mp3',
 		['zelda']		= SOUND_PATH .. 'zelda.mp3',
+
+		--~  credit: Decursive
+		['affliction']	= SOUND_PATH .. 'affliction.ogg',	-- Addon.media.sound.affliction
+		['failure']	= SOUND_PATH .. 'failure.ogg',	-- Addon.media.sound.failure
+		['necrotic']	= SOUND_PATH .. 'necrotic.ogg',	-- Addon.media.sound.necrotic
 	},
 }
 
@@ -135,12 +148,14 @@ LSM.RegisterCallback("TruthSharedMedia", "LibSharedMedia_Registered", LSMRegiste
 Addon.media = media
 -- _G[AddOn]['media'] = media
 
---[[Addon.RegisterBackground 			= RegisterBackground
+--[[
+Addon.RegisterBackground 			= RegisterBackground
 Addon.RegisterBorder 				= RegisterBorder
 Addon.RegisterFont 					= RegisterFont
 Addon.RegisterStatusbar				= RegisterStatusbar
 Addon.RegisterSound 				= RegisterSound
---]]
+--]]
+
 
 --================================================================================================--
 
@@ -175,7 +190,8 @@ Addon.RegisterSound 				= RegisterSound
 		['statusbar']				= ADDON_PATH .. '\\media\\statusbar\\',
 		['sound']					= ADDON_PATH .. '\\media\\sound\\',
 	}
---]]
+--]]
+
 --[[ Media Table
 
 	local media = {
@@ -214,7 +230,8 @@ Addon.RegisterSound 				= RegisterSound
 			['zelda']		= SOUND_PATH .. 'zelda.mp3',
 		},
 	}
---]]
+--]]
+
 --==============================================--
 --	Game Fonts
 --==============================================--

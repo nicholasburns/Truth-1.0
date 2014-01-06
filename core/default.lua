@@ -1,7 +1,7 @@
-﻿local AddOn, Addon = ...							-- _G[AddOn]['default'] = {}
+﻿local AddOn, Addon = ...
 
 
-local P = _G[AddOn]['pixel']['P']
+local P = Addon[1]["PixelSizer"] or 1
 
 
 --==============================================--
@@ -20,16 +20,32 @@ local default = {
   -- Addon.default.border
 	border = {
 		['color']		= {.6, .6, .6, 1},				-- Addon.default.border.color
-		['texture']	= Addon.media.background.solid,	-- Addon.default.border.texture
-		['textureAlt']	= Addon.media.background.solid,	-- Addon.default.border.textureAlt
+		['texture']	= Addon.media.border.solid,		-- Addon.default.border.texture
+		['textureAlt']	= Addon.media.border.white,		-- Addon.default.border.textureAlt
 	},
 
   -- Addon.default.font
 	font = {
+		[1]			= Addon.media.font.continuum,		-- Addon.default.font[1]
+		[2]			= P[14],						-- Addon.default.font[2]
+		[3]			= '',						-- Addon.default.font[3]
+		[4]			= P[1],						-- Addon.default.font[4]
 		['file']		= Addon.media.font.continuum,		-- Addon.default.font.file
 		['size']		= P[14],						-- Addon.default.font.size
 		['flag']		= '',						-- Addon.default.font.flag
 		['shad']		= P[1],						-- Addon.default.font.shad
+	},
+
+  -- Addon.default.pxfont
+	pxfont = {
+		[1]			= Addon.media.font.visitor,		-- Addon.default.pxfont[1]
+		[2]			= P[14],						-- Addon.default.pxfont[2]
+		[3]			= '',						-- Addon.default.pxfont[3]
+		[4]			= P[1],						-- Addon.default.pxfont[4]
+		['file']		= Addon.media.font.visitor,		-- Addon.default.pxfont.file
+		['size']		= P[14],						-- Addon.default.pxfont.size
+		['flag']		= '',						-- Addon.default.pxfont.flag
+		['shad']		= P[1],						-- Addon.default.pxfont.shad
 	},
 
   -- Addon.default.overlay
@@ -46,4 +62,4 @@ local default = {
 }
 
 
-Addon.default = default								-- _G[AddOn]['default'] = default
+Addon.default = default

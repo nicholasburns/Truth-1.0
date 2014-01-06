@@ -1,6 +1,8 @@
+-- TOOLTIP FULLSCREEN_DIALOG FULLSCREEN DIALOG HIGH MEDIUM LOW BACKGROUND
 local AddOn, Addon = ...
 local A, C, T, L = unpack(select(2, ...))
 local print = function(...) Addon.print('init', ...) end
+
 
 
 
@@ -18,16 +20,28 @@ do
 end
 
 --==============================================--
---	Slashes
+--	_Dev
 --==============================================--
 do
-	if (not IsAddOnLoaded('_Dev')) then return end
+	-- assert(_Dev, '_Dev not found')
+
+	if (IsAddOnLoaded('_Dev')) then
+
+		-- Framerate and CPU Stats Display
+		_DevOptions.Stats.Enabled = false
+
+		SLASH_TRUTH_OUTLINE1 = '/out'
+		SlashCmdList['TRUTH_OUTLINE'] = SlashCmdList['_DEV_OUTLINE']
+
+	else
+		print('_Dev', 'Addon not loaded')
+		return
+	end
+
 
 	SLASH_TRUTH_DUMP1 = '/d'
 	SlashCmdList['TRUTH_DUMP'] = SlashCmdList['DUMP']
 
-	SLASH_TRUTH_OUTLINE1 = '/out'
-	SlashCmdList['TRUTH_OUTLINE'] = SlashCmdList['_DEV_OUTLINE']
 end
 
 --==============================================--

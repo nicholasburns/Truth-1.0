@@ -38,7 +38,9 @@ hooksecurefunc('WatchFrameDropDown_Initialize', function(self)
 	if (self.type == 'QUEST') then
 
 		tblDropDown = {
-			text = L_WATCH_WOWHEAD_LINK, notCheckable = true, arg1 = self.index,
+			text = L_WATCH_WOWHEAD_LINK,
+			notCheckable = true,
+			arg1 = self.index,
 			func = function(_, watchId)
 				local logId = GetQuestIndexForWatch(watchId)
 				local _, _, _, _, _, _, _, _, questId = GetQuestLogTitle(logId)

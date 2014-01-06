@@ -2,7 +2,7 @@
 local AddOn, Addon = ...
 local A, C, T, L = unpack(select(2, ...))
 if (not C["Chat"]["Channels"]["Enable"]) then return end
-local print = function(...) Addon.print('channels', ...) end
+local print = function(...) Addon.print('chat.channels', ...) end
 
 local format = string.format
 
@@ -14,7 +14,6 @@ local format = string.format
 --	Constants
 --==============================================--
 local FORMATSTRING = C["Chat"]["Channels"]["FormatString"]
--- local FORMATSTRING = "%s "						-- '01.18 G Hey Guys'
 
 local L_BN_IN 			= format(FORMATSTRING, "B")
 local L_BN_OUT			= format(FORMATSTRING, "@")

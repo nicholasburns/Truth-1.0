@@ -2,9 +2,9 @@
 local AddOn, Addon = ...
 local A, C, T, L = unpack(select(2, ...))
 if (not C["Chat"]["Tab"]["Enable"]) then return end
-local print = function(...) Addon.print('tabs', ...) end
-local P  = _G[AddOn]['pixel']['P']
-local px = _G[AddOn]['pixel']['px']
+local print = function(...) Addon.print('chat.tabs', ...) end
+local P = A["PixelSizer"]
+local X = A["PixelSize"]
 
 
 

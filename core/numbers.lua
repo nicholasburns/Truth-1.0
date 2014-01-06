@@ -3,11 +3,14 @@ local A, C, T, L = unpack(select(2, ...))
 if (not C["Addon"]["Numbers"]["Enable"]) then return end
 local print = function(...) Addon.print('numbers', ...) end
 
-local assert = assert
 local format = string.format
 local gsub = string.gsub
 local match = string.match
 local reverse = string.reverse
+
+local assert = assert
+local type = type
+local error = error
 
 
 --==============================================--
@@ -29,12 +32,12 @@ T.Round = function(number, decimals)
   -- Remove decimal from a number
 
 	if (not decimals) then decimals = 0 end
-
 	return (('%%.%df'):format(decimals)):format(number)  -- return format(format('%%.%df', decimals), number) --> AsphyxiaUI/Handler/Math.lua
 end
 
 T.HexToRBG = function(cstring)				-- credit: AzOptionsFactory.lua
   -- Converts string colors to RGBA
+
 	local a, r, g, b = cstring:match("^|c(..)(..)(..)(..)")
 	return format("%d", "0x"..r)/255, format("%d", "0x"..g)/255, format("%d", "0x"..b)/255, format("%d", "0x"..a)/255
 end
@@ -68,7 +71,21 @@ end
 	print(Commas('NEG $22333444.563')) 	=>  NEG $22,333,444.563
 --]]
 
-T.ShortValue = function(v)
+
+T.ShortValueNegative = function(v)
+	if (v <= 999) then
+		return v
+	end
+	if (v >= 1000000) then
+		local value = format("%.1fm", v / 1000000)
+		return value
+	elseif (v >= 1000) then
+		local value = format("%.1fk", v / 1000)
+		return value
+	end
+end
+
+local ShortValue = function(v)
 	if (v >= 1e9) then
 		return ("%.1fb"):format(v / 1e9):gsub("%.?0+([kmb])$", "%1")
 	elseif (v >= 1e6) then
@@ -79,21 +96,7 @@ T.ShortValue = function(v)
 		return v
 	end
 end
-
-T.ShortValueNegative = function(v)
-	if (v <= 999) then
-		return v
-	end
-
-	if (v >= 1000000) then
-		local value = format("%.1fm", v / 1000000)
-		return value
-	elseif (v >= 1000) then
-		local value = format("%.1fk", v / 1000)
-		return value
-	end
-end
-
+T.ShortValue = ShortValue
 
 T.FormatNumber = function(nf, min, max)
 	assert(NumberFormats[nf], 'Invalid number format (nf): ' .. nf)
@@ -111,7 +114,7 @@ T.FormatNumber = function(nf, min, max)
 		if (deficit <= 0) then
 			return ''
 		else
-			return format(useNF, T.ShortValue(deficit))
+			return format(useNF, ShortValue(deficit))
 		end
 
 	elseif (nf == 'PERCENT') then
@@ -122,23 +125,51 @@ T.FormatNumber = function(nf, min, max)
 
 	elseif (nf == 'CURRENT' or ((nf == 'CURRENT_MAX' or nf == 'CURRENT_MAX_PERCENT' or nf == 'CURRENT_PERCENT') and min == max)) then
 
-		return format(NumberFormats['CURRENT'],  T.ShortValue(min))
+		return format(NumberFormats['CURRENT'], ShortValue(min))
 
 	elseif (nf == 'CURRENT_MAX') then
 
-		return format(useNF, T.ShortValue(min), T.ShortValue(max))
+		return format(useNF, ShortValue(min), ShortValue(max))
 
 	elseif (nf == 'CURRENT_PERCENT') then
-		local s = format(useNF, T.ShortValue(min), format("%.1f", min / max * 100))
+		local s = format(useNF, ShortValue(min), format("%.1f", min / max * 100))
 		s = s:gsub(".0%%", "%%")
 
 		return s
 
 	elseif (nf == 'CURRENT_MAX_PERCENT') then
-		local s = format(useNF, T.ShortValue(min), T.ShortValue(max), format("%.1f", min / max * 100))
+		local s = format(useNF, ShortValue(min), ShortValue(max), format("%.1f", min / max * 100))
 		s = s:gsub(".0%%", "%%")
 
 		return s
 	end
 end
-T.GetFormattedText = FormatNumber
+T.GetFormattedNumber = FormatNumber
+
+T.IsPositiveNumber = function(value)
+	if (type(value) ~= 'number') then
+		error(format('%s must be a number, got %s.', '%s', type(value)))
+	end
+
+	if (value <= 0) then
+		error('%s must be greater than zero.')
+	end
+
+	return value
+end
+
+T.Counter = function(start, increment)
+--  usage:
+--	odds = Counter(1, 2)
+--	by10 = Counter(0, 10)
+
+	local count = start
+
+	return function()
+		local n = count
+		count = increment
+
+		return n
+	end
+end
+

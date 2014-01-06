@@ -1,7 +1,176 @@
 -- credit: ShestakUI
 local AddOn, Addon = ...
 local A, C, T, L = unpack(select(2, ...))
+local print = function(...) Addon.print('author', ...) end
+local ipairs = ipairs
 
+
+
+
+
+--==============================================--
+--	Auction Frame
+--==============================================--
+if (false) then
+	local af = CreateFrame('Frame')
+	af:RegisterEvent("ADDON_LOADED")
+	af:SetScript('OnEvent', function(self, event, addon)
+		if (addon == "Blizzard_AuctionUI") then
+
+			local BrowseButtons = {
+				BrowseBidButton,
+				BidBidButton,
+				BrowseBuyoutButton,
+				BidBuyoutButton,
+				BrowseCloseButton,
+				BidCloseButton,
+				BrowseSearchButton,
+				AuctionsCreateAuctionButton,
+				AuctionsCancelAuctionButton,
+				AuctionsCloseButton,
+				BrowseResetButton,
+				AuctionsStackSizeMaxButton,
+				AuctionsNumStacksMaxButton,
+			}
+
+		  -- AuctionFrame					-- 15
+			AuctionFrame:Template()
+			AuctionFrame:MakeMovable()
+
+		  -- AuctionFrameBrowse				-- 16
+		  -- T.Template(AuctionFrameBrowse)
+
+		  -- Browse Buttons					-- 17
+			for _, v in ipairs(BrowseButtons) do
+				if (v) then
+					v:SkinButton()
+				end
+			end
+
+		  -- Fix Button Positions
+			AuctionsCloseButton:Point("BOTTOMRIGHT", AuctionFrameAuctions, "BOTTOMRIGHT", 66, 10)
+			AuctionsCancelAuctionButton:Point("RIGHT", AuctionsCloseButton, "LEFT", -4, 0)
+
+			BidCloseButton:Point("BOTTOMRIGHT", AuctionFrameBid, "BOTTOMRIGHT", 66, 10)
+			BidBuyoutButton:Point("RIGHT", BidCloseButton, "LEFT", -4, 0)
+			BidBidButton:Point("RIGHT", BidBuyoutButton, "LEFT", -4, 0)
+
+			BrowseCloseButton:Point("BOTTOMRIGHT", AuctionFrameBrowse, "BOTTOMRIGHT", 66, 10)
+			BrowseBuyoutButton:Point("RIGHT", BrowseCloseButton, "LEFT", -4, 0)
+			BrowseBidButton:Point("RIGHT", BrowseBuyoutButton, "LEFT", -4, 0)
+			BrowseResetButton:Point("TOPLEFT", AuctionFrameBrowse, "TOPLEFT", 81, -74)
+			BrowseSearchButton:Point("TOPRIGHT", AuctionFrameBrowse, "TOPRIGHT", 25, -34)
+
+			AuctionsItemButton:Strip()
+			AuctionsItemButton:StyleButton()
+			AuctionsItemButton:Template('DEFAULT', true)
+
+			AuctionsItemButton:SetScript("OnUpdate", function()
+				if (AuctionsItemButton:GetNormalTexture()) then
+					AuctionsItemButton:GetNormalTexture():SetTexCoord(0.1, 0.9, 0.1, 0.9)
+					AuctionsItemButton:GetNormalTexture():ClearAllPoints()
+					AuctionsItemButton:GetNormalTexture():Point("TOPLEFT", 2, -2)
+					AuctionsItemButton:GetNormalTexture():Point("BOTTOMRIGHT", -2, 2)
+				end
+			end)
+
+
+		  -- Filter Buttons					-- 17
+			for i = 1, (NUM_FILTERS_TO_DISPLAY or 15) do
+				local button = _G["AuctionFilterButton" .. i]
+				if (button) then
+					button:SkinButton()
+				end
+			end
+
+		  -- Check Boxes
+			IsUsableCheckButton:SkinCheckBox()
+			ShowOnPlayerCheckButton:SkinCheckBox()
+
+		  -- Tabs							-- AuctionFrameTab1-3
+			for i = 1, (AuctionFrame.numTabs --[[ or 3]]) do
+				local tab = _G["AuctionFrameTab" .. i]
+
+				if (tab) then
+					tab:SkinTab(true)
+				end
+			end
+
+		  -- PrevNextButtons
+			BrowsePrevPageButton:SkinPrevNextButton()
+			BrowseNextPageButton:SkinPrevNextButton()
+
+		  -- ScrollBar
+			BrowseFilterScrollFrameScrollBar:SkinScrollBar()
+			BrowseScrollFrameScrollBar:SkinScrollBar()
+			AuctionsScrollFrameScrollBar:SkinScrollBar()
+			BidScrollFrameScrollBar:SkinScrollBar()
+
+
+		  -- Release Data Tables
+			BrowseButtons = nil
+
+		  -- Print Confirmation
+		  -- print('AucutionFrame skinning is..:', 'complete')
+		end
+	end)
+end
+
+
+
+--==============================================--
+--	Macro Frame
+--==============================================--
+do
+	local mf = CreateFrame('Frame')
+	mf:RegisterEvent("ADDON_LOADED")
+	mf:SetScript('OnEvent', function(self, event, addon)
+		if (addon == "Blizzard_MacroUI") then
+			T.MakeMovable(MacroFrame)
+
+			local MacroFrameButtons = {
+				MacroEditButton,
+				MacroSaveButton,
+				MacroCancelButton,
+				MacroExitButton,
+				MacroNewButton,
+				MacroDeleteButton,
+			}
+
+			for _, v in ipairs(MacroFrameButtons) do
+				if (v) then
+					v:SkinButton()
+				else
+					print('button:  '.. (v.GetName and v:GetName() or v), 'wtf')
+				end
+			end
+
+			MacroFrameButtons = nil
+
+		  -- print('MacroUI Skin:', 'complete')
+		end
+	end)
+end
+
+--==============================================--
+--	Reforging Frame
+--==============================================--
+do
+	local rf = CreateFrame('Frame')
+	rf:RegisterEvent("ADDON_LOADED")
+	rf:SetScript('OnEvent', function(self, event, addon)
+		if (addon == "Blizzard_ReforgingUI") then
+			T.MakeMovable(ReforgingFrame)
+		end
+	end)
+end
+
+--==============================================--
+--	Spell Overlay Strata
+--==============================================--
+do
+	SpellActivationOverlayFrame:SetFrameStrata("BACKGROUND")
+end
 
 --==============================================--
 --	Force other warning
@@ -9,10 +178,10 @@ local A, C, T, L = unpack(select(2, ...))
 do
 	local PlaySound = PlaySound
 
-	local warn = CreateFrame("Frame")
+	local warn = CreateFrame('Frame')
 	warn:RegisterEvent("PARTY_INVITE_REQUEST")
 	warn:RegisterEvent("CONFIRM_SUMMON")
-	warn:SetScript("OnEvent", function(self, event)
+	warn:SetScript('OnEvent', function(self, event)
 		if (event == "PARTY_INVITE_REQUEST" or event == "CONFIRM_SUMMON") then
 			PlaySound("ReadyCheck", "Master")
 		end
@@ -27,9 +196,9 @@ end
 	do
 		local AchievementFrame_SetFilter = AchievementFrame_SetFilter
 
-		local filt = CreateFrame("Frame")
+		local filt = CreateFrame('Frame')
 		filt:RegisterEvent("ADDON_LOADED")
-		filt:SetScript("OnEvent", function(self, event, addon)
+		filt:SetScript('OnEvent', function(self, event, addon)
 			if (addon == "Blizzard_AchievementUI") then
 				AchievementFrame_SetFilter(3)
 			end
@@ -44,9 +213,9 @@ end
 do
 	local ForceQuit = ForceQuit
 
-	local quit = CreateFrame("Frame")
+	local quit = CreateFrame('Frame')
 	quit:RegisterEvent("CHAT_MSG_SYSTEM")
-	quit:SetScript("OnEvent", function(self, event, msg)
+	quit:SetScript('OnEvent', function(self, event, msg)
 		if (event == "CHAT_MSG_SYSTEM") then
 			if (msg and msg == IDLE_MESSAGE) then	-- IDLE_MESSAGE = "You have been inactive for some time and will be logged out of the game. If you wish to remain logged in, hit the cancel button."
 				ForceQuit()
@@ -54,7 +223,8 @@ do
 		end
 	end)
 end
---]]
+--]]
+
 --==============================================--
 --	Delete Replace Enchant popup
 --==============================================--
@@ -62,9 +232,9 @@ do
 	local ReplaceEnchant = ReplaceEnchant
 	local StaticPopup_Hide = StaticPopup_Hide
 
-	local ench = CreateFrame("Frame")
+	local ench = CreateFrame('Frame')
 	ench:RegisterEvent("REPLACE_ENCHANT")
-	ench:SetScript("OnEvent", function(self, event)
+	ench:SetScript('OnEvent', function(self, event)
 		if (event == "REPLACE_ENCHANT") then
 			ReplaceEnchant()
 			StaticPopup_Hide("REPLACE_ENCHANT")
@@ -211,9 +381,9 @@ local specs = {
 }
 
 
-local handler = CreateFrame("Frame")
+local handler = CreateFrame('Frame')
 handler:RegisterEvent("PLAYER_TALENT_UPDATE")
-handler:SetScript("OnEvent", function()
+handler:SetScript('OnEvent', function()
 	spec = GetSpecialization()
 	if (spec) then
 		PaperDoll_InitStatCategories = function()

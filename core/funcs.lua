@@ -1,8 +1,8 @@
 ﻿local AddOn, Addon = ...
 local A, C, T, L = unpack(select(2, ...))
 local print = function(...) Addon.print('funcs', ...) end
-local P  = _G[AddOn]['pixel']['P']
-local px = _G[AddOn]['pixel']['px']
+local P = A["PixelSizer"]
+local X = A["PixelSize"]
 
 local tinsert = table.insert
 local assert, select, unpack = assert, select, unpack
@@ -317,214 +317,56 @@ end
 --	Object
 --==============================================--
 T.Button = function(parent, text)
-  -- Button Factory
-
-	local buttonName = '$parent' .. text .. 'Button'
-	local button = CreateFrame('Button', buttonName, parent, 'UIPanelButtonTemplate')			-- local button = CreateFrame('Button', '$parent' .. text .. 'Button', parent, 'UIPanelButtonTemplate')
+	local button = CreateFrame('Button', '$parent'..text..'Button', parent, 'UIPanelButtonTemplate')
 	button:SetText(text)
 
 	return button
 end
 
---==============================================--
---	Math
---==============================================--
---[[ T.Comma = function(num)
-  -- credit:	AsphyxiaUI/Handler/Math.lua
-  -- @[use]:	fs:SetText(format('%s: %s', 'TOTAL_RAID_DAMAGE', T.Comma(value)))
-
-	local Left, Number, Right = match(num, '^([^%d]*%d)(%d*)(.-)$')
-
-	return Left .. reverse(gsub(reverse(Number), '(%d%d%d)', '%1,')) .. Right
+T.ResizeButton = function(frame)
+	local resize = CreateFrame('Button', '$parentResizeButton', frame)
+	resize:SetPoint('BOTTOMRIGHT', frame, -5, 5)
+	resize:SetSize(16, 16)
+	resize:SetNormalTexture([=[Interface\CHATFRAME\UI-ChatIM-SizeGrabber-Up]=])
+	resize:SetPushedTexture([=[Interface\CHATFRAME\UI-ChatIM-SizeGrabber-Down]=])
+	resize:SetHighlightTexture([=[Interface\CHATFRAME\UI-ChatIM-SizeGrabber-Highlight]=])
+	resize:SetScript('OnMouseDown', function(self) frame:StartSizing() end)
+	resize:SetScript('OnMouseUp',   function(self) frame:StopMovingOrSizing() end)
+-- f.resize = CreateFrame('Button', '$parentResizeButton', frame)
+-- f.resize:SetPoint('BOTTOMRIGHT', frame, -5, 5)
+-- f.resize:SetSize(16, 16)
+-- f.resize:SetNormalTexture([=[Interface\CHATFRAME\UI-ChatIM-SizeGrabber-Up]=])
+-- f.resize:SetPushedTexture([=[Interface\CHATFRAME\UI-ChatIM-SizeGrabber-Down]=])
+-- f.resize:SetHighlightTexture([=[Interface\CHATFRAME\UI-ChatIM-SizeGrabber-Highlight]=])
+-- f.resize:SetScript('OnMouseDown', function(self) f:StartSizing() end)
+-- f.resize:SetScript('OnMouseUp',   function(self) f:StopMovingOrSizing() end)
 end
 
-T.Round = function(number, decimals)
-  -- Remove decimal from a number
-
-	if (not decimals) then decimals = 0 end
-
-	return (('%%.%df'):format(decimals)):format(number)  -- return format(format('%%.%df', decimals), number) --> AsphyxiaUI/Handler/Math.lua
+T.CloseButton = function(frame)
+	local close = CreateFrame('Button', '$parentCloseButton', f, 'UIPanelCloseButton')
+	close:SetPoint('TOPRIGHT', 4, 0)
+	close:SetScript('OnClick', function() f:Hide() end)
+-- f.close = CreateFrame('Button', '$parentCloseButton', f, 'UIPanelCloseButton')
+-- f.close:SetPoint('TOPRIGHT', 4, 0)
+-- f.close:SetScript('OnClick', function() f:Hide() end)
 end
 
-T.RGBToHex = function(r, g, b)
-  -- Converts a color from an RGB format to Hexidecimal format
-
-	r = r <= 1 and r >= 0 and r or 0
-	g = g <= 1 and g >= 0 and g or 0
-	b = b <= 1 and b >= 0 and b or 0
-
-	return format('|cff%02x%02x%02x', r * 255, g * 255, b * 255)
-end
-
-T.ShortValue = function(v)
-  -- Inputs (120,000) and returns 120k
-
-	if (v <= 999) then
-		return v
-	end
-
-	if (v >= 1000000) then
-		return format('%.1fm', v / 1000000)
-
-	elseif (v >= 1000) then
-		return format('%.1fk', v / 1000)
-	end
-end
---]]
-
---==============================================--
---	Time
---==============================================--
---[[ T.FormatTime = function(s)
-  -- credit: Shestak
-  -- usage:  local time = FormatTime(self.timeLeft)
-
-	local day = 86400
-	local hour = 3600
-	local minute = 60
-
-	if     (s >= day)		then return format('%dd', floor(s / day + 0.5)), s % day
-	elseif (s >= hour)		then return format('%dh', floor(s / hour + 0.5)), s % hour
-	elseif (s >= minute)	then return format('%dm', floor(s / minute + 0.5)), s % minute
-	elseif (s >= minute/12)	then return  floor(s + 0.5), (s * 100 - floor(s * 100)) / 100
-	end
-
-	return format('%.1f', s), (s * 100 - floor(s * 100)) / 100
-end
---]]
-
-T.FormatTime_Tukui = function(s)
-  -- Display seconds as mins / hours / days (credit: Tukui)
-
-	local day = 86400
-	local hour = 3600
-	local minute = 60
-
-	if     (s >= day)    	then return format('%dd', ceil(s / day))
-	elseif (s >= hour)   	then return format('%dh', ceil(s / hour))
-	elseif (s >= minute) 	then return format('%dm', ceil(s / minute))
-	elseif (s >= minute/12)	then return floor(s) end
-
-	return format('%.1f', s)
-end
-
-T.FormatTime_Asphyxia = function(s)
-  -- credit:	AsphyxiaUI/Handler/Math.lua
-  -- @[use]:	local Time = T.FormatTime(Seconds)
-
-	local Day, Hour, Minute = 86400, 3600, 60
-
-	if (s >= Day) then
-		return format("%dd", ceil(s / Day))
-	elseif (s >= Hour) then
-		return format("%dh", ceil(s / Hour))
-	elseif (s >= Minute) then
-		return format("%dm", ceil(s / Minute))
-	elseif (s >= Minute / 12) then
-		return floor(s)
-	end
-
-	return format("%.1f", s)
-end
-
-T.FormatTime = function(s)
-  -- credit:	Shestak\Modules\ActionBars\Cooldowns.lua
-
-	local day, hour, minute = 86400, 3600, 60
-
-	if (s >= day) then
-		return format("%dd", floor(s / day + 0.5)), s % day
-	elseif (s >= hour) then
-		return format("%dh", floor(s / hour + 0.5)), s % hour
-	elseif (s >= minute) then
-		return format("%dm", floor(s / minute + 0.5)), s % minute
-	end
-
-	return floor(s + 0.5), s - floor(s)
-end
-
---[[ T.GetFormattedTime = function(s)				-- cooldown.lua
-
-	local day, hour, minute = 86400, 3600, 60
-
-	if (s >= day) then
-		return format("%dd", floor(s / day + 0.5)), s % day
-
-	elseif (s >= hour) then
-		return format("%dh", floor(s / hour + 0.5)), s % hour
-
-	elseif (s >= minute) then
-		return format("%dm", floor(s / minute + 0.5)), s % minute
-
-	end
-
-	return floor(s + 0.5), s - floor(s)
-end
---]]
-
-
---==============================================--
---	Text
---==============================================--
---[[ local NumberFormats = {
-	['CURRENT'] 			= "%s",
-	['CURRENT_MAX']		= "%s - %s",
-	['CURRENT_PERCENT']		= "%s - %s%%",
-	['CURRENT_MAX_PERCENT']	= "%s - %s | %s%%",
-	['DEFICIT'] 			= "-%s",
-	['PERCENT'] 			= "%s%%",
-}
-
-T.GetFormattedText = function(nf, min, max)
-	assert(NumberFormats[nf], 'Invalid number format (nf): ' .. nf)
-	assert(min, 'You need to provide a current value. ' ..
-			  'Usage:  T.GetFormattedText(nf, min, max)')
-	assert(max, 'You need to provide a maximum value. '..
-			  'Usage:  T.GetFormattedText(nf, min, max)')
-
-	if (max == 0) then max = 1 end
-
-	local useNF = NumberFormats[nf]
-
-	if (nf == 'DEFICIT') then
-		local deficit = max - min
-
-		if (deficit <= 0) then
-			return ''
-		else
-			return format(useNF, T.ShortValue(deficit))
-		end
-
-	elseif (nf == 'PERCENT') then
-		local s = format(useNF, format("%.1f", min / max * 100))
-		s = s:gsub(".0%%", "%%")
-
-		return s
-
-	elseif (nf == 'CURRENT' or ((nf == 'CURRENT_MAX' or nf == 'CURRENT_MAX_PERCENT' or nf == 'CURRENT_PERCENT') and min == max)) then
-		return format(NumberFormats['CURRENT'],  T.ShortValue(min))
-
-	elseif (nf == 'CURRENT_MAX') then
-		return format(useNF, T.ShortValue(min), T.ShortValue(max))
-
-	elseif (nf == 'CURRENT_PERCENT') then
-		local s = format(useNF, T.ShortValue(min), format("%.1f", min / max * 100))
-		s = s:gsub(".0%%", "%%")
-
-		return s
-
-	elseif (nf == 'CURRENT_MAX_PERCENT') then
-		local s = format(useNF, T.ShortValue(min), T.ShortValue(max), format("%.1f", min / max * 100))
-		s = s:gsub(".0%%", "%%")
-
-		return s
-	end
-end
---]]
 
 --==============================================--
 --	Player Information
 --==============================================--
+T.PlayerHasBuff = function(buffname)
+--~  Checks current buffs for a buff that matches "buffname"
+
+	for i = 1, 40 do
+		local name = UnitBuff("player", i)
+		if (name == nil) then return false end
+		if (name == buffname) then return true end
+	end
+
+	return false
+end
+
 T.CheckRole = function()
 	local role = ''
 	local tree = GetSpecialization()
@@ -539,6 +381,11 @@ end
 T.InCombat = function()
 	return InCombatLockdown() or UnitAffectingCombat('player') or UnitAffectingCombat('pet')
 end
+
+T.PlayerInCombat = function()
+	return InCombatLockdown() or UnitAffectingCombat('player') or UnitAffectingCombat('pet')
+end
+
 
 
 

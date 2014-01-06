@@ -2,13 +2,15 @@
 local A, C, T, L = unpack(select(2, ...))
 if (not C["Automation"]["Merchant"]["Enable"]) then return end
 local print = function(...) Addon.print('merchant', ...) end
+-- local toggle = 0
 
 
-
+--==============================================--
 -- Properties
-local count = 0
-local toggle = 0
-local startcash = GetMoney() or 0
+--==============================================--
+local count 								-- = 0
+local startcash 							-- = 0 -- GetMoney() or 0
+
 
 
 --==============================================--
@@ -39,15 +41,7 @@ f:SetScript("OnEvent", function(self, event, ...)
 			end
 		end																		-- f:RegisterEvent("MERCHANT_CLOSED")
 
-		local vendorstring = 'VendorTotal'
-		local endcash = GetMoney()
-		local gain = endcash - startcash
-
-		if (gain == 0) then
-			print(vendorstring, 'No items sold.')
-		elseif (gain > 0) then
-			print(vendorstring, GREEN_FONT_COLOR_CODE .. '+|r' .. GetCoinTextureString(gain))
-		end
+		self:RegisterEvent("MERCHANT_CLOSED")
 
 
 		--===============================--
@@ -64,6 +58,7 @@ f:SetScript("OnEvent", function(self, event, ...)
 			if (repaircost <= availablemoney) then
 				RepairAllItems(0)
 				print(repairstring, RED_FONT_COLOR_CODE .. '-|r' .. GetCoinTextureString(repaircost))
+
 		  -- player needs more gold for repairs
 			else
 				print(repairstring, ERR_NOT_ENOUGH_MONEY) 								-- ERR_NOT_ENOUGH_MONEY = "You don't have enough money."
@@ -71,10 +66,32 @@ f:SetScript("OnEvent", function(self, event, ...)
 		else
 		  -- no repairs needed
 			if (repaircost <= 0) then
-				print(repairstring, '0g')
+				print(repairstring, GetCoinTextureString(0))
+				-- print(repairstring, '0g')
 			end
 		end
 	end
+
+	--==============================================--
+	--	AUTO-SELL GREYS: EARNING SUMMARY
+	--==============================================--
+	if (event == "MERCHANT_CLOSED") then
+		-- reset counter
+		-- startcash = 0
+
+		local endcash = GetMoney()
+		local gain = endcash - startcash
+
+		if (gain == 0) then
+			print('VendorTotal', 'No items sold.')
+
+		elseif (gain > 0) then
+			print('VendorTotal', GREEN_FONT_COLOR_CODE .. '+|r' .. GetCoinTextureString(gain))
+
+		end
+
+	end
+
 end)
 
 

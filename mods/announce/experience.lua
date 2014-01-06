@@ -3,23 +3,110 @@ local A, C, T, L = unpack(select(2, ...))
 if (not C["Announce"]["Experience"]["Enable"]) then return end
 local print = function(...) Addon.print('experience', ...) end
 
-
-
-
--- Addon
 local XP = CreateFrame('Frame')
 
+XP:SetScript("OnEvent", function(self, event, ...)
+	self[event](self, ...)
+end)
 
 
 
 
+
+
+Addon.DefaultDB = {
+	["Experience"] = {
+		["Enable"] = true,
+		["Counter"] = 0,
+		["Timestamp"] = '',
+		["Announcements"] = true,
+	},
+}
+
+
+
+
+
+--==============================================--
+--	Events
+--==============================================--
+XP:RegisterEvent("ADDON_LOADED")
+XP:RegisterEvent('CHAT_MSG_COMBAT_XP_GAIN')
+XP:SetScript("OnEvent", function(self, event, arg1, arg2)
+	if (event == "ADDON_LOADED" and arg1 == AddOn) then
+		self:RegisterEvent("CHAT_MSG_COMBAT_XP_GAIN")
+	end
+
+	if (event == "PLAYER_ENTERING_WORLD") then
+
+		TruDB = TruDB or Addon.DefaultDB
+
+		if (not TruDB["Experience"]) then
+			TruDB["Experience"] = {}
+			TruDB["Experience"]["Enable"] = Addon.DefaultDB["Experience"]["Enable"]
+			TruDB["Experience"]["Counter"] = Addon.DefaultDB["Experience"]["Counter"]
+			TruDB["Experience"]["Timestamp"] = Addon.DefaultDB["Experience"]["Timestamp"]
+			TruDB["Experience"]["Announcements"] = Addon.DefaultDB["Experience"]["Announcements"]
+		end
+
+--[[		if (not TruDB) then
+			TruDB = {}
+		end
+		if (not TruDB["Experience"]) then
+			TruDB["Experience"] = {
+				["Enable"] = true,
+				["Counter"] = 0,
+				["Timestamp"] = '',
+				["Announcements"] = true,
+			}
+		end
+		C["Experience"]["Enable"]		= TruDB["Experience"]["Enable"]
+		C["Experience"]["Counter"]		= TruDB["Experience"]["Counter"]
+		C["Experience"]["Timestamp"]		= TruDB["Experience"]["Timestamp"]
+		C["Experience"]["Announcements"]	= TruDB["Experience"]["Announcements"]
+--]]
+
+		-- self:UnregisterEvent(event)
+	end
+
+	if (event == "CHAT_MSG_COMBAT_XP_GAIN") then
+
+		local xp_gained = arg1:match("(%d+) experience")
+		local xp_tolvl  = UnitXPMax("player") - UnitXP("player")			-- local xp_remain
+
+		print(xp_gained .. " XP gained, " .. floor(xp_tolvl / xp_gained) .. " equal gains to next level")
+
+	end
+
+end)
+
+
+
+--==============================================--
+--	Backup
+--==============================================--
+--[[
+local XP = CreateFrame('Frame')
 function XP:CHAT_MSG_COMBAT_XP_GAIN()
 	local xpgained = arg1:match("(%d+) experience")
 	local xptolvl = UnitXPMax("player") - UnitXP("player")
-
 	DEFAULT_CHAT_FRAME:AddMessage(xpgained .. " XP gained, " .. floor(xptolvl / xpgained) .. " equal gains to next level")
 end
+local function OnEvent(self, event, arg1, arg2)							-- (self, event, msgtype, faction, reputation, ...)
+	local xp_gained = arg1:match("(%d+) experience")
+	local xp_tolvl  = UnitXPMax("player") - UnitXP("player")			-- local xp_remain
+	print(xp_gained .. " XP gained, " .. floor(xp_tolvl / xp_gained) .. " equal gains to next level")
+end
+local function OnLoad(self)
+	self:RegisterEvent("CHAT_MSG_COMBAT_XP_GAIN")
+	self:RegisterEvent("COMBAT_TEXT_UPDATE")
+end
+--]]
 
+
+--==============================================--
+--	Reference
+--==============================================--
 --[[ CHAT_MSG_COMBAT_XP_GAIN
 	Fires when the player gains experience points
 
@@ -38,69 +125,7 @@ end
 	counter 		- This variable appears to be a counter of chat events that the client recieves (number)
 --]]
 
-local function OnEvent(self, event, arg1, arg2)							-- (self, event, msgtype, faction, reputation, ...)
-	if (event == "CHAT_MSG_COMBAT_XP_GAIN") then
 
-		local xp_gained = arg1:match("(%d+) experience")
-		local xp_tolvl  = UnitXPMax("player") - UnitXP("player")			-- local xp_remain
-
-		print(xp_gained .. " XP gained, " .. floor(xp_tolvl / xp_gained) .. " equal gains to next level")
-
-	end
-end
-
-local function OnLoad(self)
-	self:RegisterEvent("CHAT_MSG_COMBAT_XP_GAIN")
-	self:RegisterEvent("COMBAT_TEXT_UPDATE")
-end
-
---==============================================--
---	Events
---==============================================--
-XP:RegisterEvent('CHAT_MSG_COMBAT_XP_GAIN')
-XP:SetScript('OnEvent', function(self, event, ...)
-
-end)
-XP:SetScript('OnLoad', function(self)
-
-end)
-
-
--- ADDON_LOADED
-XP:RegisterEvent("ADDON_LOADED")
-XP:SetScript("OnEvent", function(self, event, addon)
-	if (event == "ADDON_LOADED" and addon ~= "Truth") then
-		return end
-
-	if (event == "PLAYER_ENTERING_WORLD") then
-
-		if (not TruthDB) then
-			TruthDB = {}
-		end
-
-		if (not TruthDB["Experience"]) then
-
-			TruthDB["Experience"] = {
-				["Enable"] = true,
-				["Counter"] = 0,
-				["Timestamp"] = '',
-				["Announcements"] = true,
-			}
-		end
-
-		C["Experience"]["Enable"]		= TruthDB["Experience"]["Enable"]
-		C["Experience"]["Counter"]		= TruthDB["Experience"]["Counter"]
-		C["Experience"]["Timestamp"]		= TruthDB["Experience"]["Timestamp"]
-		C["Experience"]["Announcements"]	= TruthDB["Experience"]["Announcements"]
-
-		self:UnregisterEvent(event)
-	end
-end)
-
-
---==============================================--
---	Reference
---==============================================--
 -- elseif (event == "COMBAT_TEXT_UPDATE" and msgtype == "FACTION") then end
 
 --[[	COMBAT_TEXT_UPDATE

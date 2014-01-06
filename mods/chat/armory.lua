@@ -2,28 +2,19 @@
 local AddOn, Addon = ...
 local A, C, T, L = unpack(select(2, ...))
 if (not C["Chat"]["Armory"]["Enable"]) then return end
-local print = function(...) Addon.print('armory', ...) end
+local print = function(...) Addon.print('chat.armory', ...) end
 
-
-local byte, char, ipairs				= byte, char, ipairs
-local format, gsub, lower, sub		= string.format, string.gsub, string.lower, string.sub
-local tinsert						= table.insert
-local StaticPopupDialogs				= StaticPopupDialogs
-local UnitPopupMenus				= UnitPopupMenus
-local UnitPopupButtons				= UnitPopupButtons
-local DEFAULT_CHAT_FRAME				= DEFAULT_CHAT_FRAME
-local UIDROPDOWNMENU_INIT_MENU		= UIDROPDOWNMENU_INIT_MENU
-local GetCVar						= GetCVar
-local UnitPopup_OnClick				= UnitPopup_OnClick
-local StaticPopup_Hide				= StaticPopup_Hide
-local StaticPopup_Show				= StaticPopup_Show
+local char, ipairs = char, ipairs
+local byte, format, gsub, lower, sub = string.byte, string.format, string.gsub, string.lower, string.sub
+local tinsert = table.insert
+local StaticPopup_Show = StaticPopup_Show
 
 
 -- Constants
-local L_POPUP_ARMORY 				= 'Armory'
-local realmName 					= lower(A["MyRealm"])
-local realmLocal 					= sub(GetCVar('realmList'), 1, 2)
-local link 						= 'en'
+local L_POPUP_ARMORY = 'Armory'
+local realmName = lower(A["MyRealm"])
+local realmLocal = sub(GetCVar('realmList'), 1, 2)
+local link = 'en'
 
 
 -- URL Encode
@@ -57,7 +48,7 @@ StaticPopupDialogs.LINK_COPY_DIALOG = {
 	timeout 						= 0,
 	whileDead 					= true,
 	hasEditBox 					= true,
-	editBoxWidth 					= 350,
+	editBoxWidth 					= 600,
 	OnShow 						= function(self, ...) self.editBox:SetFocus() end,
 	EditBoxOnEnterPressed 			= function(self) self:GetParent():Hide() end,
 	EditBoxOnEscapePressed			= function(self) self:GetParent():Hide() end,
@@ -75,16 +66,13 @@ hooksecurefunc('UnitPopup_OnClick', function(self)
 		local inputBox = StaticPopup_Show('LINK_COPY_DIALOG')
 
 		if (realmLocal == 'us') then
-			local linkurl = 'http://' .. realmLocal .. '.battle.net/wow/' .. link .. '/char/' .. realmName .. '/' .. name .. '/advanced'
+
+					    -- http://us.battle.net/wow/en/character/malganis/Shovel/advanced
+
+			local linkurl = 'http://' .. realmLocal .. '.battle.net/wow/' .. link .. '/character/' .. realmName .. '/' .. name .. '/advanced'
 
 			inputBox.editBox:SetText(linkurl)
 			inputBox.editBox:HighlightText()
-
-			return
-		else
-			DEFAULT_CHAT_FRAME:AddMessage('|cFFFFFF00 Unsupported realm location. |r')
-
-			StaticPopup_Hide('LINK_COPY_DIALOG')
 
 			return
 		end

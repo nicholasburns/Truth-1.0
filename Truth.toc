@@ -1,7 +1,10 @@
 ﻿## Interface: 50400
 ## Title: [|cffFFFFFF Truth |r]
 ## Notes: UI Improvements
-## OptionalDeps: LibSharedMedia-3.0, Blizzard_DebugTools, Blizzard_PetJournal
-## SavedVariables: TruthDB
+## Author: Truthwithin
+#  Version: 2
+## OptionalDeps: LibSharedMedia-3.0, Blizzard_DebugTools, Blizzard_CombatText, TradeSkillMaster_Mailing, Clique, Grid, Grid2, Mapster, Omen, Postal, Prat-3.0, Quartz, Recount, ShadowedUnitFrames, TidyPlates, TipTac, TipTacTalents, tullaCC, _NPCScan.Overlay
+## SavedVariables: TruDB, TruthDB, TruCPDB, TruthCPDB
+## SavedVariablesPerCharacter: TruDBPC, TruthDBPC
 
 inc.xml

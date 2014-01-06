@@ -6,6 +6,13 @@ local print = function(...) Addon.print('eof', ...) end
 
 
 
+
+
+
+
+
+
+
 --==============================================--
 --	Mis-clicks
 --==============================================--
@@ -130,7 +137,7 @@ do
 			ConsolidatedBuffs:SetScale(1.25)						-- TemporaryEnchantFrame:SetScale(1.25)
 			UIErrorsFrame:SetScale(.75)
 
-			T.MakeMovable(InterfaceOptionsFrame, 'FULLSCREEN_DIALOG')	-- InterfaceOptionsFrame
+			-- T.MakeMovable(InterfaceOptionsFrame, 'FULLSCREEN_DIALOG')	-- InterfaceOptionsFrame
 		end
 
 		if (event == 'PLAYER_ENTERING_WORLD') then					-- self:UnregisterEvent('PLAYER_ENTERING_WORLD')					-- WatchFrame: collapse in instances (automatically)

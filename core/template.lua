@@ -1,7 +1,7 @@
-﻿local AddOn, Addon = ...							-- _G[AddOn]['template'] = {}
+﻿local AddOn, Addon = ...
 
 
-local P = _G[AddOn]['pixel']['P']
+local P = Addon[1]["PixelSizer"] or 1
 
 
 --==============================================--
@@ -24,4 +24,4 @@ local template = {
 }
 
 
-Addon.template = template							-- _G[AddOn]['template'] = template
+Addon.template = template

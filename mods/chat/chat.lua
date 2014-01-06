@@ -2,8 +2,8 @@
 local A, C, T, L = unpack(select(2, ...))
 if (not C["Chat"]["Enable"]) then return end
 local print = function(...) Addon.print('chat', ...) end
-local P  = _G[AddOn]['pixel']['P']
-local px = _G[AddOn]['pixel']['px']
+local P = A["PixelSizer"]
+local X = A["PixelSize"]
 local ipairs, pairs, select, unpack = ipairs, pairs, select, unpack
 
 
@@ -63,7 +63,9 @@ local function ResetChatSettings()
 		--[[I]] 'INSTANCE_CHAT','INSTANCE_CHAT_LEADER',
 		--[[P]] 'PARTY','PARTY_LEADER',
 		--[[R]] 'RAID','RAID_LEADER','RAID_WARNING',
-		--[[C]] 'CHANNEL1','CHANNEL2','CHANNEL3','CHANNEL4','CHANNEL5','CHANNEL6','CHANNEL7','CHANNEL8','CHANNEL9','CHANNEL10','CHANNEL11','CHANNEL12',
+		--[[C]] 'CHANNEL1','CHANNEL2','CHANNEL3','CHANNEL4',
+				'CHANNEL5','CHANNEL6','CHANNEL7','CHANNEL8',
+				'CHANNEL9','CHANNEL10','CHANNEL11','CHANNEL12',
 	}) do
 		ToggleChatColorNamesByClassGroup(true, v)
 	end
@@ -96,9 +98,7 @@ end
 
 local function SetupChatWindows()
 	for i = 1, (C["Chat"]["Windows"]) do
-
 		local f   = _G['ChatFrame'.. i]
-		local tab = _G['ChatFrame'.. i ..'Tab']
 
 		-- Fading
 		f:SetFading(false)
@@ -129,69 +129,79 @@ local function SetupChatWindows()
 
 		-- Font
 		FCF_SetChatWindowFontSize(nil, f, C["Chat"]["Font"][2])
-		f:SetFont(unpack(C["Chat"]["Font"]))											-- f:SetFont(C["Chat"]["Font"][1], C["Chat"]["Font"][2], C["Chat"]["Font"][3])
-		f:SetShadowOffset(C["Chat"]["Font"][4] or 0, -C["Chat"]["Font"][4] or 0)
+		f:SetFont(unpack(C["Chat"]["Font"]))
+	  -- f:SetShadowOffset(C["Chat"]["Font"][4] or 0, -C["Chat"]["Font"][4] or 0)
 	end
 end
 
 
-local function ChatStyle(chatframe)
-	if (_G[chatframe:GetName()]['styled']) then return end
+local function ChatStyle(frame)
+	local name = frame:GetName()
+	local f = _G[name]
+	local editbox = _G[name .. 'EditBox']
 
-	local name		= chatframe:GetName()
-	local f			= _G[name]				-- chatframe
-	local tab 		= _G[name .. 'Tab']			-- tab
-	local editbox 		= _G[name .. 'EditBox']		-- editbox
-	local buttonframe	= _G[name .. 'ButtonFrame']	-- buttonframe
+	if (f.styled) then return end
 
+--[[	CHAT_FRAME_TEXTURES = {
+		"Background",
+		"TopLeftTexture",
+		"BottomLeftTexture",
+		"TopRightTexture",
+		"BottomRightTexture",
+		"LeftTexture",
+		"RightTexture",
+		"BottomTexture",
+		"TopTexture",
+		"ButtonFrameBackground",				-- Resize Button
+		"ButtonFrameTopLeftTexture",
+		"ButtonFrameBottomLeftTexture",
+		"ButtonFrameTopRightTexture",
+		"ButtonFrameBottomRightTexture",
+		"ButtonFrameLeftTexture",
+		"ButtonFrameRightTexture",
+		"ButtonFrameBottomTexture",
+		"ButtonFrameTopTexture",
+	}
+--]]
 
 	-- ChatFrame
-	for j = 1, (#CHAT_FRAME_TEXTURES) do
-		_G[name .. CHAT_FRAME_TEXTURES[j]]:SetTexture(nil)
+	for _, value in pairs(CHAT_FRAME_TEXTURES) do
+		_G[name .. value]:SetTexture(nil)
 	end
 
-	local K = -P[3]
+	f.backdrop = CreateFrame('Frame', '$parentBackdrop', f)
+	f.backdrop:SetPoint('TOPLEFT', -3, 3)
+	f.backdrop:SetPoint('BOTTOMRIGHT', 3, -3)
+	f.backdrop:SetBackdrop({bgFile = Addon.default.backdrop.texture })
+	f.backdrop:SetBackdropColor(unpack(Addon.default.backdrop.color))
+	f.backdrop:SetFrameLevel(f:GetFrameLevel() - 1)
 
-	f:SetBackdrop({
-		bgFile = Addon.default.backdrop.texture,
-		insets = {left = K, right = K, top = K, bottom = K}})
-	f:SetBackdropColor(unpack(Addon.default.backdrop.color))
-
-	local X = P[1]
-
-	local border = CreateFrame('Frame', '$parentBorder', f)
-	border:SetPoint('TOPLEFT', X, -X)
-	border:SetPoint('BOTTOMRIGHT', -X, X)
-	border:SetBackdrop({
+	f.border = CreateFrame('Frame', '$parentBorder', f)
+	f.border:SetPoint('TOPLEFT', f.backdrop, 'TOPLEFT', X, -X)
+	f.border:SetPoint('BOTTOMRIGHT', f.backdrop, 'BOTTOMRIGHT', -X, X)
+	f.border:SetBackdrop({
 		edgeFile = Addon.default.border.texture,
 		edgeSize = X,
 		insets   = {left = X, right = X, top = X, bottom = X}})
-	border:SetBackdropBorderColor(unpack(Addon.default.border.color))
+	f.border:SetBackdropBorderColor(unpack(Addon.default.border.color))
 
 	-- EditBox
 	editbox:ClearAllPoints()
 	editbox:SetPoint('TOPLEFT', f, 0, 30)
 	editbox:SetPoint('TOPRIGHT', f, 0, 30)
+	editbox:SetTextInsets(5, 5, 5, 5)				-- (left, right, top, bottom)
 
 	-- ButtonFrame
-	local clicker = function()
-		FriendsMicroButton:RegisterForClicks('LeftButtonUp', 'RightButtonUp')
-		FriendsMicroButton:SetScript('OnClick', function(self, button)
-			if (button == 'RightButton') then
-				PlaySound('igChatEmoteButton')
-				ChatFrame_OpenMenu()
-			else
-				ToggleFriendsFrame(1)	-- 1= friends, 2 = who, 3 = guild, 4 = raid, 'default' = last open tab
-			end
-		end)
-	end
-
 	ChatFrameMenuButton:Kill()
   -- _G[name .. 'ButtonFrame']:Kill()
 	_G[name .. 'ButtonFrameUpButton']:Kill()
 	_G[name .. 'ButtonFrameDownButton']:Kill()
   -- _G[name .. 'ButtonFrameBottomButton']:Kill()
 	_G[name .. 'ButtonFrameMinimizeButton']:Kill()
+
+	-- ResizeButton
+	_G[name .. 'ResizeButton']:ClearAllPoints()
+	_G[name .. 'ResizeButton']:SetPoint('BOTTOMRIGHT', f.backdrop, 'BOTTOMRIGHT', -X, X)
 
 	f.styled = true
 end
@@ -242,6 +252,19 @@ CHAT_SUSPENDED_NOTICE_BN		= ' - [%d]'  -- 'Left Channel: |Hchannel:CHANNEL:%d|h[
 --================================================================================================--
 --	Backup
 --================================================================================================--
+--[[ ButtonFrame
+
+	FriendsMicroButton:RegisterForClicks('LeftButtonUp', 'RightButtonUp')
+	FriendsMicroButton:SetScript('OnClick', function(self, button)
+		if (button == 'RightButton') then
+			PlaySound('igChatEmoteButton')
+			ChatFrame_OpenMenu()
+		else
+			ToggleFriendsFrame(1)	-- 1= friends, 2 = who, 3 = guild, 4 = raid, 'default' = last open tab
+		end
+	end)
+--]]
+
 --[[ Channel Strings
 
 	local L_GENERAL 				= 'General'
@@ -369,13 +392,13 @@ CHAT_SUSPENDED_NOTICE_BN		= ' - [%d]'  -- 'Left Channel: |Hchannel:CHANNEL:%d|h[
 
 	editbox.backdrop = CreateFrame('Frame', '$parentBackdrop', editbox)
 	editbox.backdrop:SetFrameLevel(editbox:GetFrameLevel() - 1)
-	editbox.backdrop:SetPoint('TOPLEFT', 2 * px, -10)
-	editbox.backdrop:SetPoint('BOTTOMRIGHT', -2 * px, 2 * px)
+	editbox.backdrop:SetPoint('TOPLEFT', 2 * X, -10)
+	editbox.backdrop:SetPoint('BOTTOMRIGHT', -2 * X, 2 * X)
 	editbox.backdrop:SetBackdrop({
 		bgFile 	= default.backdrop.texture,
 		edgeFile 	= default.border.texture,
-		edgeSize 	= px,
-		insets 	= {left = px, right = px, top = px, bottom = px}})
+		edgeSize 	= X,
+		insets 	= {left = X, right = X, top = X, bottom = X}})
 	editbox.backdrop:SetBackdropColor(unpack(default.backdrop.color))
 	editbox.backdrop:SetBackdropBorderColor(unpack(default.border.color))
 --]]

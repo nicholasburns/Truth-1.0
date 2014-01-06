@@ -4,9 +4,6 @@ local A, C, T, L = unpack(select(2, ...))
 if (not C["Map"]["Worldmap"]["Enable"]) then return end
 local print = function(...) Addon.print('worldmap', ...) end
 
-local P  = _G[AddOn]['pixel']['P']
-local px = _G[AddOn]['pixel']['px']
-
 local floor = math.floor
 local UIParent = UIParent
 

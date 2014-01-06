@@ -1,4 +1,4 @@
-local AddOn, Addon = ...
+﻿local AddOn, Addon = ...
 local A, C, T, L = unpack(select(2, ...))
 if (not C["AOM"]["Enable"]) then return end								-- if (not C.aom.enable) then return end
 local print = function(...) Addon.print('AOM', ...) end
@@ -6,13 +6,22 @@ if (IsAddOnLoaded('AOM')) then
 	print('AOM detected (as standalone)', 'Truth version of AOM aborted') return
 end
 
-local P  = _G[AddOn]['pixel']['P']
-local px = _G[AddOn]['pixel']['px']
-local X  = _G[AddOn]['pixel']['px']
-
-
-local _G = _G
-local sort, tinsert, strmatch, tonumber = table.sort, table.insert, string.match, tonumber
+local pairs = pairs
+local select = select
+local unpack = unpack
+local sort = table.sort
+local match = string.match
+local tinsert = table.insert
+local upper = string.upper
+local ReloadUI = ReloadUI
+local PlaySound = PlaySound
+local CreateFrame = CreateFrame
+local GetAddOnInfo = GetAddOnInfo
+local DisableAddOn, EnableAddOn = DisableAddOn, EnableAddOn
+local HideUIPanel, ShowUIPanel = HideUIPanel, ShowUIPanel
+local UIParent = UIParent
+local GameTooltip = GameTooltip
+local GameMenuFrame = GameMenuFrame
 
 --==============================================--
 --	Addon Frame
@@ -49,10 +58,6 @@ resize:SetScript('OnMouseDown', function(self) aom:StartSizing() end)
 resize:SetScript('OnMouseUp',   function(self) aom:StopMovingOrSizing() end)
 
 -- Reload Button
--- local reload = Button('AOM', 'Reload')
--- local reload = Button(aom, 'Reload')
--- local buttonName = '$parent' .. text .. 'Button'
--- local button = CreateFrame('Button', buttonName, parent, 'UIPanelButtonTemplate')
 local reload = CreateFrame('Button', '$parentReloadButton', aom, 'UIPanelButtonTemplate')
 reload:SetText('Reload')
 reload:Size(150, 22)
@@ -80,10 +85,10 @@ aom:SetScript('OnMouseDown', function(self) self:StartMoving() end)
 -- Resizable
 aom:SetResizable(true)
 aom:SetMinResize(200, 400)
-aom:SetMaxResize(A["ScreenWidth"], A["ScreenHeight"]) 										-- (A["ScreenWidth"] * 0.8, A["ScreenHeight"] * 0.8)
+aom:SetMaxResize(A["ScreenWidth"], A["ScreenHeight"])
 
 -- Skin
-aom:Template()																		-- Skin(aom)
+aom:Template()
 
 
 --==============================================--
@@ -91,13 +96,13 @@ aom:Template()																		-- Skin(aom)
 --==============================================--
 do
 	-- ScrollFrame
-	scroll:Template()																	-- Skin(scroll)
+	scroll:Template()
 	scroll:SetBackdropColor(unpack(Addon.default.backdrop.colorAlt))
 
 	-- ScrollChild
 	local self = scrollchild
 	self:SetPoint('TOPLEFT')
-	self:Size(scroll:GetWidth(), scroll:GetHeight())										-- self:SetSize(scroll:GetWidth() * X, scroll:GetHeight() * X)
+	self:Size(scroll:GetWidth(), scroll:GetHeight())
 
 	-- AddonList
 	self.addons = {}
@@ -130,7 +135,6 @@ do
 
 			-- Tooltip Elements
 			local AddonTitle, AddonNotes, AddonDeps
-
 			AddonTitle = title and (title .. '|r')
 			AddonNotes = notes and ('|n|cffFFFFFF'.. notes ..'|r') or '|n|n|cffFF4400[Notes do not exist for this Addon.]|r|n'
 			AddonDeps  = ''
@@ -159,8 +163,8 @@ do
 			f:SetBackdropColor(unpack(Addon.default.backdrop.colorAlt)) 					-- f:SetBackdropColor(.2, .2, .2, 1)
 			f:SetScript('OnEnter', function(self)
 				GameTooltip:ClearLines()
-				GameTooltip:SetOwner(self, ANCHOR_TOPRIGHT)
-				GameTooltip:AddLine(self.string)										--(self.title)
+				GameTooltip:SetOwner(self, ANCHOR_TOPRIGHT)								--> Align the bottom right of the tooltip with the top right of the owner
+				GameTooltip:AddLine(self.string)
 				GameTooltip:Show()
 			end)
 			f:SetScript('OnLeave', function(self)
@@ -186,17 +190,15 @@ do
 	end
 end
 
-
 --==============================================--
 --	GameMenu Button
 --==============================================--
 local show = CreateFrame('Button', 'AOM-GameMenuButton', GameMenuFrame, 'GameMenuButtonTemplate')
 show:SetText(ADDONS)
-
 show:SetSize(show:GetWidth() + 50, show:GetHeight() + 10)
 show:SetPoint('BOTTOM', GameMenuFrame, 'TOP', 0, 15)
-
 show:SetScript('OnClick', function()
+
 	PlaySound('igMainMenuOptionCheckBoxOn', 'Master')
 	HideUIPanel(GameMenuFrame)
 
@@ -204,15 +206,80 @@ show:SetScript('OnClick', function()
 end)
 
 --==============================================--
+--	Skin All GameMenuButtons
+--==============================================--
+local BlizzardMenuButtons = {
+   -- + -----------------
+   -- Escape Menu
+   -- + -----------------
+	"Help",
+	"Store",
+	 --
+	"Options",
+	"UIOptions",
+	"Keybindings",
+	"Macros",
+	"MacOptions",
+	 --
+	"Logout",
+	"Quit",
+	 --
+	"Continue",
+   -- + -----------------
+
+	"AddOns",
+	"Ratings",
+	"SoundOptions",
+}
+
+for i = 1, (#BlizzardMenuButtons) do
+	local button = _G["GameMenuButton" .. BlizzardMenuButtons[i]]
+
+	if (button) then
+		button:SkinButton()
+	end
+
+end
+
+BlizzardMenuButtons = nil						--~  Release frame from memory
+
+--==============================================--
 --	Slashes
 --==============================================--
-SlashCmdList["AOM"] = function()
+SLASH_TRUTH_AOM1 = "/aom"
+
+SlashCmdList["TRUTH_AOM"] = function()
 	aom:Show()
 end
-_G["SLASH_AOM1"] = '/aom'
 
 
 
+
+--==============================================--
+--	Reference
+--==============================================--
+--[[ SetAnchorType
+--~  Sets the method for anchoring the tooltip relative to its owner
+
+	[use]
+	GameTooltip:SetAnchorType(anchor, [X-off], [Y-off])
+
+	[args]
+	• anchor - Token identifying the positioning method for the tooltip relative to its owner frame (string)
+
+		• ANCHOR_BOTTOMLEFT - Align the top right of the tooltip with the bottom left of the owner
+		• ANCHOR_CURSOR - Toolip follows the mouse cursor
+		• ANCHOR_LEFT - Align the bottom right of the tooltip with the top left of the owner
+		• ANCHOR_NONE - Tooltip appears in the default position
+		• ANCHOR_PRESERVE - Tooltip's position is saved between sessions (useful if the tooltip is made user-movable)
+		• ANCHOR_RIGHT - Align the bottom left of the tooltip with the top right of the owner
+		• ANCHOR_TOPLEFT - Align the bottom left of the tooltip with the top left of the owner
+		• ANCHOR_TOPRIGHT - Align the bottom right of the tooltip with the top right of the owner
+
+	• xOffset - Horizontal distance from the anchor to the tooltip (number)
+	• yOffset - Vertical distance from the anchor to the tooltip (number)
+
+--]]
 
 --==============================================--
 --	Backup

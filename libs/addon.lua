@@ -81,12 +81,11 @@ end)
 -- credit: AsphyxiaUI (Sinaris, Azilroka)
 -- AsphyxiaUI\Handler\Handler.lua
 local AddOn, Addon = ...
-local A, A, C, T, L = unpack(select(2, ...))
+local A, C, T, L = unpack(select(2, ...))
 
 local select = select
 local tonumber = tonumber
 local match = string.match
-
 
 --==============================================--
 --	AsphyxiaUI
@@ -95,17 +94,14 @@ A["Name"] = ...
 A["Version"] = GetAddOnMetadata( ..., "Version" )
 A["Title"] = GetAddOnMetadata( ..., "Title" )
 A["ClientLocale"] = GetLocale()
-
-A["Print"] = function( ... )
-	print( "|cffFF6347" .. A["Name"] .. "|r:", ... )
-end
+A["Print"] = function( ... ) print( "|cffFF6347" .. A["Name"] .. "|r:", ... ) end
 
 --==============================================--
 --	Graphic
 --==============================================--
-A["ScreenResolution"] = GetCVar( "gxResolution" )
-A["ScreenHeight"] = tonumber( match( A["ScreenResolution"], "%d+x(%d+)" ) )
-A["ScreenWidth"] = tonumber( match( A["ScreenResolution"], "(%d+)x+%d" ) )
+A["ScreenReso"] = GetCVar( "gxResolution" )
+A["ScreenHeight"] = tonumber( match( A["ScreenReso"], "%d+x(%d+)" ) )
+A["ScreenWidth"] = tonumber( match( A["ScreenReso"], "(%d+)x+%d" ) )
 
 --==============================================--
 --	Player
@@ -121,14 +117,10 @@ A["MyRealm"] 	= GetRealmName()
 --	Most Used
 --==============================================--
 A["Dummy"] = function() return end
-
 A["TexCoords"] = { 0.08, 0.92, 0.08, 0.92 }
-
 A["Colors"] = ( CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS )[ A["MyClass"] ]
-
 A["HiddenFrame"] = CreateFrame( "Frame", nil, UIParent )
 A["HiddenFrame"]:Hide()
-
 A["PetBattleHider"] = CreateFrame( "Frame", nil, UIParent, "SecureHandlerStateTemplate" )
 A["PetBattleHider"]:SetAllPoints()
 RegisterStateDriver( A["PetBattleHider"], "visibility", "[petbattle] hide; show" )
@@ -142,9 +134,6 @@ end
 
 local Layouts = {}
 A["Layouts"] = Layouts
-
-
-
 
 --==============================================--
 --	Constants

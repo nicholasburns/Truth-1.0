@@ -2,11 +2,14 @@ local AddOn, Addon = ...
 local A, C, T, L = unpack(select(2, ...))
 if (not C["Tooltip"]["Enable"]) then return end
 local print = function(...) Addon.print('tooltip', ...) end
-local P  = _G[AddOn]['pixel']['P']
-local px = _G[AddOn]['pixel']['px']
-
+local P = A["PixelSizer"]
+local X = A["PixelSize"]
 local pairs, select, unpack = pairs, select, unpack
 local gsub, find, format, match = string.gsub, string.find, string.format, string.match
+
+-- local GameTooltip = _G['GameTooltip']
+-- local GameTooltipStatusBar = _G['GameTooltipStatusBar']
+-- local ItemRefTooltip = _G['ItemRefTooltip']
 
 
 -- Locale
@@ -20,10 +23,6 @@ local L_CHAT_DND = '<DND>'
 local TruthTip = CreateFrame('Frame', "TruthTip", UIParent)
 
 
-
-local GameTooltip = _G['GameTooltip']
-local GameTooltipStatusBar = _G['GameTooltipStatusBar']
-local ItemRefTooltip = _G['ItemRefTooltip']
 
 local Tooltips = {
 	GameTooltip,
@@ -330,8 +329,8 @@ local function Template(f, t)
 	f:SetBackdrop({
 		bgFile 	= Addon.default.backdrop.texture,
 		edgeFile 	= Addon.default.border.texture,
-		edgeSize 	= px,
-		insets 	= {left = -px, right = -px, top = -px, bottom = -px}})
+		edgeSize 	= X,
+		insets 	= {left = -X, right = -X, top = -X, bottom = -X}})
 	f:SetBackdropColor(bR, bG, bB, bA)
 	f:SetBackdropBorderColor(eR, eG, eB, eA)
 end

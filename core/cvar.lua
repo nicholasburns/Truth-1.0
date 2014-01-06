@@ -1,5 +1,5 @@
 ﻿local AddOn, Addon = ...
-local px = _G[AddOn]['pixel']
+local X = _G[AddOn]['pixel']
 
 
 local cfg
@@ -13,7 +13,7 @@ taintLog 							= 2,				-- Records taint msgs (file is written periodically & 1x
 
 --[[PIXELPERFECT]]
 useUiScale						= 1,
-uiScale							= px.uiscale,		--[[ uiScale = Addon.uiscale, ]] -- T.uiscale, -- min(2, max(.64, 768 / match(GetCVar('gxResolution'), '%d+x(%d+)'))),
+uiScale							= Addon[1]["UIScale"],		--[[ uiScale = Addon.uiscale, ]] -- T.uiscale, -- min(2, max(.64, 768 / match(GetCVar('gxResolution'), '%d+x(%d+)'))),
 gxMultisample						= 1,
 --[[/PIXELPERFECT]]
 
@@ -171,15 +171,15 @@ fctReactives						= 0,
 local cvar = CreateFrame('Frame')
 cvar:RegisterEvent('PLAYER_ENTERING_WORLD')
 cvar:SetScript('OnEvent', function(self, event, addon)
-	SetMultisampleFormat(1)							-- PixelPerfection requires value to be (1)
+	SetMultisampleFormat(1)					-- PixelPerfection requires value to be (1)
 
-	for k, v in pairs(cfg) do						-- Apply settings (above)
+	for k, v in pairs(cfg) do
 		SetCVar(k, v)
 	end
 
-	cfg = nil										-- Release the table
+	cfg = nil								-- Release the table
 
-	SetActionBarToggles(1, 1, 1, 1, 1)					-- SetActionBarToggles(bar1, bar2, bar3, bar4, alwaysShow)
+	SetActionBarToggles(1, 1, 1, 1, 1)			-- SetActionBarToggles(bar1, bar2, bar3, bar4, alwaysShow)
 
 	self:UnregisterEvent(event)
 end)
@@ -188,7 +188,7 @@ end)
 --==============================================--
 --	Tidyup
 --==============================================--
-do
+-- do
   -- SetAllowLowLevelRaid(1)
   -- ShowAccountAchievements(1)
   -- SetAutoDeclineGuildInvites(1)
@@ -196,7 +196,7 @@ do
 
   -- debug
   -- _G[AddOn].print('cvar', 'GetCVar(uiScale)', GetCVar('uiScale'))
-end
+-- end
 
 
 --==============================================--

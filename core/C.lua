@@ -1,9 +1,9 @@
 local AddOn, Addon = ...
 local A, C, T, L = unpack(select(2, ...))
+local P = A["PixelSizer"]
+local X = A["PixelSize"]
 
-
-local P = _G[AddOn]['pixel']['P']
-local px = _G[AddOn]['pixel']['px']
+-- FolderLocation = _G.debugstack():match("Truth\\(.-)\\")
 
 
 --==============================================--
@@ -14,6 +14,9 @@ C["Addon"] = {
 	["Numbers"] = {
 		["Enable"] = true,
 	},
+	["SV"] = {
+		["Enable"] = false,
+	},
 	["Text"] = {
 		["Enable"] = true,
 	},
@@ -23,18 +26,30 @@ C["Addon"] = {
 	},
 }
 
+C["Debug"] = {
+	["Enable"] = true,
+	["Dump"] = {
+		["Enable"] = true,
+		["Font"] = {Addon.media.font.myriad, P[14], nil, P[1]},
+		["ButtonNormal"] = [=[Interface\BUTTONS\UI-Panel-CollapseButton-Disabled]=],
+		["ButtonHighlight"] = [=[Interface\BUTTONS\UI-Panel-CollapseButton-Up]=],
+	  -- ["ButtonDisabled"] = [=[Interface\BUTTONS\UI-Panel-CollapseButton-Disabled]=],
+	  -- ["ButtonHighlight"] = [=[Interface\BUTTONS\UI-Panel-CollapseButton-Down]=],
+	},
+}
+
 C["AOM"] = {
 	["Enable"] = true,
 }
-
 
 C["Announce"] = {
 	["Enable"] = true,
 	["Experience"] = {
 		["Enable"] = true,
-		["Counter"] = 0,
-		["Timestamp"] = '',
-		["Announces"] = '',
+		["Announcements"] = true,
+		["EventCounter"] = 0,
+		["RunningTotal"] = 0,
+		["Timestamp"] = "",
 	},
 	["Interrupts"] = {
 		["Enable"] = true,
@@ -48,9 +63,10 @@ C["Announce"] = {
 	},
 	["Reputation"] = {
 		["Enable"] = true,
-		["Counter"] = 0,
-		["Timestamp"] = '',
 		["Announcements"] = true,
+		["EventCounter"] = 0,
+		["RunningTotal"] = 0,
+		["Timestamp"] = "",
 	},
 	["Spells"] = {
 		["Enable"] = true,
@@ -75,13 +91,37 @@ C["Announce"] = {
 	},
 }
 
+C["Aura"] = {
+	["Enable"] = true,
+--~  ["Lib"] = {},							--~  Currently a stand-alone Lib
+	["CP"] = {
+		["Enable"] = false,
+		["Size"] = P[30],
+		["Scale"] = P[2],
+		["Pad"] = P[3],
+		["Point"] = {"CENTER", UIParent, "CENTER", 0, 0},
+		["Backdrop"] = {Addon.template.backdrop},
+	},
+	["Status"] = {
+		["Enable"] = false,
+		["IconTexture"] = [=[Interface\BUTTONS\Spell-Reset]=],		-- sword
+	  -- ["IconTexture"] = [=[Interface\Icons\ABILITY_DUALWIELD]=],	-- dualwield
+	},
+	["StealthFX"] = {
+		["Enable"] = false,
+	},
+	["UNIT_AURA"] = {
+		["Enable"] = true,
+	},
+}
+
 C["Automation"] = {
 	["Enable"] = true,
 	["Merchant"] = {
 		["Enable"] = true,
 	},
 	["Release"] = {
-		["Enable"] = false,
+		["Enable"] = true,
 	},
 }
 
@@ -91,8 +131,8 @@ C["Bar"] = {
 		["Enable"] = true,
 	},
 	["Cooldown"] = {
-		["Enable"] = true,
-		["Font"] = {Addon.media.font.visitor, P[22], 'OUTLINE', P[1], { 0, 0, 0, .8 }},
+		["Enable"] = false,
+		["Font"] = {Addon.media.font.visitor, P[18], 'OUTLINE', P[1], { 0, 0, 0, .8 }},
 	},
 }
 
@@ -136,8 +176,8 @@ C["Chat"] = {
 		["Enable"] = true,
 	},
 	['Font'] = {Addon.media.font.myriad, P[14], nil, P[1]},
-	['Width'] = 520 * px,
-	['Height'] = 250 * px,
+	['Width'] = 520 * X,
+	['Height'] = 250 * X,
 	['Point'] = {'BOTTOMLEFT',  UIParent,  5, 5},
 	['Point4'] = {'BOTTOMRIGHT', UIParent, -5, 5},
 	['Windows'] = 4,
@@ -155,7 +195,17 @@ C["Map"] = {
 C["Quest"] = {
 	["Enable"] = true,
 	["Wowhead"] = {
-		["Enable"] = false,
+		["Enable"] = true,
+	},
+}
+
+C["Skin"] = {
+	["Enable"] = true,
+	["Auction"] = {
+		["Enable"] = true,
+	},
+	["DebugTools"] = {
+		["Enable"] = true,
 	},
 }
 
@@ -171,7 +221,7 @@ C["Tooltip"] = {
 		["Size"] = 24,
 	},
 	["Text"] = {
-		["Enable"] = true,					-- Display tooltip text
+		["Enable"] = false,					-- Display tooltip text
 		["PvP"] = false,
 		["Realms"] = false,
 	},
@@ -196,75 +246,13 @@ C["Tooltip"] = {
 	},
 }
 
-C["Unit"] = {
-	["Enable"] = true,
-	["Status"] = {
-		["Enable"] = true,
-	},
-}
 
 
 
-
---==============================================--
---	Unused
---==============================================--
---[[
-C["Ampere"] = {
-	["Enable"] = true,
-}
-
-C["Announce"]["Readycheck"] = {
-	["Enable"] = false,
-}
-
-
-C["CombatStatus"] = {
-	["Enable"] = false,
-}
-C["Slots"] = {
-	["Enable"] = false,
-}
-C["RaidMarkers"] = {
-	["Enable"] = false,
-}
-C["Chat"]["Armory"] = false
-C["Chat"]["Filter"] = false
-C["Chat"]["Scroll"] = false
-C["Chat"]["Timestamp"] = {
-	["Enable"] = true,
-}
-
-C["Tooltip"]["Anchor"] = false						-- Anchor tooltip to default position when appropriate (mousing over a unitframe, etc.)
---]]
 
 --==============================================--
 --	Backup
 --==============================================--
---[[ Unused Settings
-
-	C.tooltip = {
-		enable = false,
-		spellid = false,
-		text = {
-			enable = false,
-			pvp = false,						-- Display player pvp status
-			faction = false,					-- Dispaly player faction
-			realms = false,					-- Display player realms
-			level = false,						-- Dispaly player level
-			ranks = false,						-- Display guild ranks if a unit is guilded
-			spec = false,						-- Display the players talent spec in the tooltip
-			titles = false,					-- Display player titles
-			statusbar = false,					-- Display statusbar number values
-			itemid = false,					-- Display the itemID in item mouseovers
-			spellid = false,					-- Display the spellID in spell mouseovers
-		},
-		tot2 = false,							-- Adds ToT in green (displays < YOU > when something is targeting you)
-		tot3 = false,							-- LookinAtMe
-	}
-
---]]
-
 --[[ Print Wrapper
 
 	local print = function(prefix, amount)

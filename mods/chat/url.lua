@@ -1,7 +1,7 @@
 ﻿-- Credit: Gibberish (p3lim)
 local A, C, T, L = unpack(select(2, ...))
 if (not C["Chat"]["Url"]["Enable"]) then return end
-local print = function(...) Addon.print('url', ...) end
+local print = function(...) Addon.print('chat.url', ...) end
 local select, unpack, gsub, match, sub = select, unpack, string.gsub, string.match, string.sub
 local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
 
